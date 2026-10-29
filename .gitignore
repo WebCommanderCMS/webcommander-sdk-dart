@@ -1,0 +1,28 @@
+# Dart / pub
+.dart_tool/
+.packages
+build/
+doc/api/
+# Library package: the lockfile is not committed (only apps pin it).
+pubspec.lock
+
+# Local working area: parked artifacts, one-off drivers, notes.
+/scratchpad/
+
+# Credentials for live verification. Never committed.
+.env
+.env.*
+!.env.example
+
+# A Dart SDK unpacked here for local use.
+/bin/dart-sdk/
+
+# OS / IDE
+.idea/
+.vscode/
+*.iml
+.DS_Store
+Thumbs.db
+
+# Local log files.
+*.log

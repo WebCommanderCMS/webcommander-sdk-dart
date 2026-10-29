@@ -1,0 +1,36 @@
+# What the published archive leaves out.
+#
+# `.pubignore` replaces `.gitignore` for publishing, so the git exclusions are
+# repeated below. `bin/` matters most: a Dart SDK unpacked there for local use
+# would otherwise be packaged.
+#
+# Published: lib/, README.md, LICENSE, pubspec.yaml.
+
+# Publish-only: internal to this repository.
+# The live suite and its run settings.
+test/
+dart_test.yaml
+DEVELOPMENT.md
+ENDPOINTS.md
+CHANGELOG.md
+.gitignore
+.pubignore
+analysis_options.yaml
+.env.example
+
+# Also excluded from git.
+bin/
+.dart_tool/
+.packages
+build/
+doc/api/
+pubspec.lock
+scratchpad/
+.env
+.env.*
+.idea/
+.vscode/
+*.iml
+.DS_Store
+Thumbs.db
+*.log

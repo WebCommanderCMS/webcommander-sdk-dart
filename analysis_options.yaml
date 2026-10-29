@@ -1,0 +1,24 @@
+# `dart analyze` must report no issues.
+include: package:lints/recommended.yaml
+
+analyzer:
+  # Gitignored local areas, not package code: /scratchpad/ holds local probes and
+  # /bin/dart-sdk/ is a Dart SDK unpacked for local use.
+  exclude:
+    - scratchpad/**
+    - bin/dart-sdk/**
+  language:
+    strict-casts: true
+    strict-inference: true
+    strict-raw-types: true
+
+linter:
+  # public_member_api_docs is not enabled: a member whose name and signature say
+  # everything needs no doc comment.
+  rules:
+    - prefer_final_locals
+    - prefer_final_in_for_each
+    - avoid_dynamic_calls
+    - unnecessary_lambdas
+    - prefer_single_quotes
+    - directives_ordering
