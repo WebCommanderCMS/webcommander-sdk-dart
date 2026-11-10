@@ -6,6 +6,9 @@ class SearchResultPageUrls {
   static const String searchResultPage =
       '/api/{api_version}/admin/settings/page_settings/search_result_page';
 
+  /// Rebuilds the store's search index. `POST` only.
+  static const String searchReindex = '/api/{api_version}/admin/search/reindex';
+
   static const String searchResultPageSection =
       '/api/{api_version}/admin/settings/page_settings/search_result_page/{section}';
 

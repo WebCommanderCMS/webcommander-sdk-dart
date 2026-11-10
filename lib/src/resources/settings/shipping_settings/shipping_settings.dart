@@ -30,7 +30,7 @@ class ShippingSettingsResource {
           raiseOnError: raiseOnError, responseFormat: responseFormat);
 }
 
-/// Read the whole area — `GET /admin/settings/shipping_settings`.
+/// Read the whole area — `GET /admin/settings/shipping_settings/general`.
 Future<ApiResponse> getShippingSettings(
   WebCommanderClient client, {
   Map<String, Object?>? queryParams,
@@ -43,7 +43,7 @@ Future<ApiResponse> getShippingSettings(
         responseFormat: responseFormat,
         dtoDecoder: ShippingSettings.fromMap);
 
-/// Write one field or several — `PATCH /admin/settings/shipping_settings`.
+/// Write one field or several — `PATCH /admin/settings/shipping_settings/general`.
 Future<ApiResponse> patchShippingSettings(
         WebCommanderClient client, Object payload,
         {bool? raiseOnError, String? responseFormat}) =>
@@ -54,7 +54,7 @@ Future<ApiResponse> patchShippingSettings(
         dtoDecoder: ShippingSettings.fromMap);
 
 /// Ask whether the area is reachable —
-/// `HEAD /admin/settings/shipping_settings`.
+/// `HEAD /admin/settings/shipping_settings/general`.
 Future<ApiResponse> headShippingSettings(WebCommanderClient client,
         {bool? raiseOnError, String? responseFormat}) =>
     client.sendApiRequest('HEAD', ShippingSettingsUrls.shippingSettings,

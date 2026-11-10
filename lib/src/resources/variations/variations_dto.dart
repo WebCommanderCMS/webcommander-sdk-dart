@@ -316,6 +316,7 @@ class ProductVariantPricing extends Dto {
     this.basePrice,
     this.costPrice,
     this.salePrice,
+    this.compareAtPrice,
     this.isOnSale,
     this.saleAmountType,
     this.hidePrice,
@@ -332,6 +333,7 @@ class ProductVariantPricing extends Dto {
       basePrice: readDecimal(source['base_price']),
       costPrice: readDecimal(source['cost_price']),
       salePrice: readDecimal(source['sale_price']),
+      compareAtPrice: readDecimal(source['compare_at_price']),
       isOnSale: readFlag(source['is_on_sale']),
       saleAmountType: readText(source['sale_amount_type']),
       hidePrice: readFlag(source['hide_price']),
@@ -348,6 +350,8 @@ class ProductVariantPricing extends Dto {
   final double? costPrice;
 
   final double? salePrice;
+
+  final double? compareAtPrice;
 
   final bool? isOnSale;
 
@@ -366,6 +370,7 @@ class ProductVariantPricing extends Dto {
         'base_price': basePrice,
         'cost_price': costPrice,
         'sale_price': salePrice,
+        'compare_at_price': compareAtPrice,
         'is_on_sale': isOnSale,
         'sale_amount_type': saleAmountType,
         'hide_price': hidePrice,
@@ -1029,5 +1034,236 @@ class ProductVariationsImportResult extends Dto {
         'status': status,
         'message': message,
         'total_variants': totalVariants,
+      };
+}
+
+/// One variant read alone, under `variation`. It is on or off as `active`,
+/// where the list and the bulk write say `available`; `options` name one label
+/// per type.
+class ProductVariantDetail extends Dto {
+  const ProductVariantDetail({
+    this.variationId,
+    this.name,
+    this.sku,
+    this.customSku,
+    this.barcode,
+    this.countryOfOrigin,
+    this.hsCode,
+    this.active,
+    this.options,
+    this.pricing,
+    this.inventory,
+    this.ordering,
+    this.transactionNo,
+    this.url,
+  });
+
+  /// Reads a single variant's `variation` envelope.
+  static ProductVariantDetail? fromMap(Object? body) {
+    final source = readRecord(body, envelopeKey: 'variation');
+    if (source == null) return null;
+    return ProductVariantDetail(
+      variationId: readInteger(source['variation_id']),
+      name: readText(source['name']),
+      sku: readText(source['sku']),
+      customSku: readText(source['custom_sku']),
+      barcode: readText(source['barcode']),
+      countryOfOrigin: readText(source['country_of_origin']),
+      hsCode: readText(source['hs_code']),
+      active: readFlag(source['active']),
+      options: readList<ProductVariantOptionReference>(
+          source['options'], ProductVariantOptionReference.fromMap),
+      pricing: ProductVariantPricing.fromMap(source['pricing']),
+      inventory: ProductVariantInventory.fromMap(source['inventory']),
+      ordering: ProductVariantOrdering.fromMap(source['ordering']),
+      transactionNo: readText(source['transaction_no']),
+      url: readText(source['url']),
+    );
+  }
+
+  final int? variationId;
+
+  final String? name;
+
+  final String? sku;
+
+  final String? customSku;
+
+  final String? barcode;
+
+  final String? countryOfOrigin;
+
+  final String? hsCode;
+
+  final bool? active;
+
+  final List<ProductVariantOptionReference?>? options;
+
+  final ProductVariantPricing? pricing;
+
+  final ProductVariantInventory? inventory;
+
+  final ProductVariantOrdering? ordering;
+
+  final String? transactionNo;
+
+  final String? url;
+
+  @override
+  String? get envelopeKey => 'variation';
+
+  @override
+  Map<String, Object?> get fields => <String, Object?>{
+        'variation_id': variationId,
+        'name': name,
+        'sku': sku,
+        'custom_sku': customSku,
+        'barcode': barcode,
+        'country_of_origin': countryOfOrigin,
+        'hs_code': hsCode,
+        'active': active,
+        'options': options,
+        'pricing': pricing,
+        'inventory': inventory,
+        'ordering': ordering,
+        'transaction_no': transactionNo,
+        'url': url,
+      };
+}
+
+/// The single-variant patch's body, no envelope; partial. The variant is turned
+/// on or off as `available`.
+class ProductVariantPatchInput extends Dto {
+  const ProductVariantPatchInput({
+    this.available,
+    this.name,
+    this.sku,
+    this.customSku,
+    this.barcode,
+    this.countryOfOrigin,
+    this.hsCode,
+    this.pricing,
+    this.inventory,
+    this.ordering,
+  });
+
+  final bool? available;
+
+  final String? name;
+
+  final String? sku;
+
+  final String? customSku;
+
+  final String? barcode;
+
+  final String? countryOfOrigin;
+
+  final String? hsCode;
+
+  final ProductVariantPricing? pricing;
+
+  final ProductVariantInventory? inventory;
+
+  final ProductVariantOrdering? ordering;
+
+  @override
+  Map<String, Object?> get fields => <String, Object?>{
+        'available': available,
+        'name': name,
+        'sku': sku,
+        'custom_sku': customSku,
+        'barcode': barcode,
+        'country_of_origin': countryOfOrigin,
+        'hs_code': hsCode,
+        'pricing': pricing,
+        'inventory': inventory,
+        'ordering': ordering,
+      };
+}
+
+/// The variant as the single-variant patch answers it: its ids and codes.
+class ProductVariantPatched extends Dto {
+  const ProductVariantPatched({
+    this.variationId,
+    this.name,
+    this.sku,
+    this.customSku,
+    this.barcode,
+    this.countryOfOrigin,
+    this.hsCode,
+  });
+
+  /// Reads the patched variant.
+  static ProductVariantPatched? fromMap(Object? body) {
+    final source = readRecord(body);
+    if (source == null) return null;
+    return ProductVariantPatched(
+      variationId: readInteger(source['variation_id']),
+      name: readText(source['name']),
+      sku: readText(source['sku']),
+      customSku: readText(source['custom_sku']),
+      barcode: readText(source['barcode']),
+      countryOfOrigin: readText(source['country_of_origin']),
+      hsCode: readText(source['hs_code']),
+    );
+  }
+
+  final int? variationId;
+
+  final String? name;
+
+  final String? sku;
+
+  final String? customSku;
+
+  final String? barcode;
+
+  final String? countryOfOrigin;
+
+  final String? hsCode;
+
+  @override
+  Map<String, Object?> get fields => <String, Object?>{
+        'variation_id': variationId,
+        'name': name,
+        'sku': sku,
+        'custom_sku': customSku,
+        'barcode': barcode,
+        'country_of_origin': countryOfOrigin,
+        'hs_code': hsCode,
+      };
+}
+
+/// The single-variant patch's answer: `status`, `message` and the `variation`.
+class ProductVariantPatchResult extends Dto {
+  const ProductVariantPatchResult({
+    this.status,
+    this.message,
+    this.variation,
+  });
+
+  /// Reads the single-variant patch's answer.
+  static ProductVariantPatchResult? fromMap(Object? body) {
+    final source = readRecord(body);
+    if (source == null) return null;
+    return ProductVariantPatchResult(
+      status: readText(source['status']),
+      message: readText(source['message']),
+      variation: ProductVariantPatched.fromMap(source['variation']),
+    );
+  }
+
+  final String? status;
+
+  final String? message;
+
+  final ProductVariantPatched? variation;
+
+  @override
+  Map<String, Object?> get fields => <String, Object?>{
+        'status': status,
+        'message': message,
+        'variation': variation,
       };
 }

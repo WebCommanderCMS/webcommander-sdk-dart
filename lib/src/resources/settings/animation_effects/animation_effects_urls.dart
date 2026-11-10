@@ -7,4 +7,8 @@ class AnimationEffectsUrls {
 
   static const String animationEffectsSection =
       '/api/{api_version}/admin/settings/animation_effects/{section}';
+
+  /// The custom preloader image: `POST` uploads it, `DELETE` removes it.
+  static const String animationEffectsCustomLoader =
+      '/api/{api_version}/admin/settings/animation_effects/custom_loader';
 }

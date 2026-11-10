@@ -617,3 +617,32 @@ class SearchResultPage extends Dto {
         'field_metadata': fieldMetadata,
       };
 }
+
+/// The reindex's answer: `status` `accepted`, `clean` and a `message`.
+class SearchReindex extends Dto {
+  const SearchReindex({this.status, this.clean, this.message});
+
+  /// Reads the reindex's answer.
+  static SearchReindex? fromMap(Object? body) {
+    final source = readRecord(body);
+    if (source == null) return null;
+    return SearchReindex(
+      status: readText(source['status']),
+      clean: readFlag(source['clean']),
+      message: readText(source['message']),
+    );
+  }
+
+  final String? status;
+
+  final bool? clean;
+
+  final String? message;
+
+  @override
+  Map<String, Object?> get fields => <String, Object?>{
+        'status': status,
+        'clean': clean,
+        'message': message,
+      };
+}

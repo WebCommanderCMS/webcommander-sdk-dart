@@ -15,6 +15,10 @@ class TrashUrls {
   static const String trashItemRestore =
       '/api/{api_version}/admin/trash/{trash_type}/{trash_item_id}/restore';
 
+  /// The links outside the store a permanent delete would break. `GET` only.
+  static const String trashItemExternalLinks =
+      '/api/{api_version}/admin/trash/{trash_type}/{trash_item_id}/external_links';
+
   static const String trashBulkRestore =
       '/api/{api_version}/admin/trash/bulk-restore';
 

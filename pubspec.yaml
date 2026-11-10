@@ -2,7 +2,7 @@ name: webcommander
 description: Dart SDK for the WebCommander v4 REST API. A thin client with OAuth2 token handling, retries and typed response views.
 # Duplicated at Sdk.version in lib/src/config/sdk_config.dart, the value the
 # User-Agent reports: Dart cannot read this file at run time.
-version: 4.0.0
+version: 4.0.1
 repository: https://github.com/WebCommanderCMS/webcommander-sdk-dart
 issue_tracker: https://github.com/WebCommanderCMS/webcommander-sdk-dart/issues
 
@@ -18,7 +18,5 @@ dependencies:
 
 dev_dependencies:
   lints: ^6.0.0
-  # Read by test/auth/auth.dart only, to load the repository's .env.
   dotenv: ^4.2.0
-  # Runs the live suite; its settings are in dart_test.yaml.
   test: ^1.31.0

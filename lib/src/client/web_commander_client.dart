@@ -21,11 +21,18 @@ import '../resources/countries/countries.dart';
 import '../resources/currencies/currencies.dart';
 import '../resources/customer_groups/customer_groups.dart';
 import '../resources/customers/admin_customers.dart';
+import '../resources/dashboard_banners/dashboard_banners.dart';
+import '../resources/dashboard_kpis/dashboard_kpis.dart';
+import '../resources/dashboard_reports/dashboard_reports.dart';
+import '../resources/dashboard_sections/dashboard_sections.dart';
+import '../resources/dashboards/dashboards.dart';
 import '../resources/discount_profiles/discount_profiles.dart';
 import '../resources/email/email.dart';
+import '../resources/gift_cards/gift_cards.dart';
 import '../resources/inventory_locations/inventory_locations.dart';
 import '../resources/order_custom_fields/order_custom_fields.dart';
 import '../resources/order_flags/order_flags.dart';
+import '../resources/order_previews/order_previews.dart';
 import '../resources/orders/orders.dart';
 import '../resources/pages/pages.dart';
 import '../resources/payment_gateways/payment_gateways.dart';
@@ -46,6 +53,9 @@ import '../resources/settings/shipping_settings/shipping_settings.dart';
 import '../resources/settings/site_settings/site_settings.dart';
 import '../resources/shipping_classes/shipping_classes.dart';
 import '../resources/shipping_methods/shipping_methods.dart';
+import '../resources/shipping_profiles/shipping_profiles.dart';
+import '../resources/shipping_rates/shipping_rates.dart';
+import '../resources/shipping_rules/shipping_rules.dart';
 import '../resources/tax_codes/tax_codes.dart';
 import '../resources/tax_country_taxes/tax_country_taxes.dart';
 import '../resources/tax_custom_profiles/tax_custom_profiles.dart';
@@ -249,6 +259,22 @@ class WebCommanderClient {
   ShippingClasses get shippingClasses =>
       _shippingClasses ??= ShippingClasses(this);
 
+  ShippingProfiles? _shippingProfiles;
+
+  /// The shipping profile endpoints, bound to this client.
+  ShippingProfiles get shippingProfiles =>
+      _shippingProfiles ??= ShippingProfiles(this);
+
+  ShippingRates? _shippingRates;
+
+  /// The shipping rate endpoints, bound to this client.
+  ShippingRates get shippingRates => _shippingRates ??= ShippingRates(this);
+
+  ShippingRules? _shippingRules;
+
+  /// The shipping rule endpoints, bound to this client.
+  ShippingRules get shippingRules => _shippingRules ??= ShippingRules(this);
+
   Aliases? _aliases;
 
   /// The domain alias endpoints, bound to this client.
@@ -259,6 +285,11 @@ class WebCommanderClient {
   /// The country endpoints, bound to this client.
   Countries get countries => _countries ??= Countries(this);
 
+  OrderPreviews? _orderPreviews;
+
+  /// The order preview endpoints, bound to this client.
+  OrderPreviews get orderPreviews => _orderPreviews ??= OrderPreviews(this);
+
   Orders? _orders;
 
   /// The order endpoints, bound to this client.
@@ -268,6 +299,34 @@ class WebCommanderClient {
 
   /// The cart endpoints, bound to this client.
   Carts get carts => _carts ??= Carts(this);
+
+  DashboardBanners? _dashboardBanners;
+
+  /// The dashboard banner endpoints, bound to this client.
+  DashboardBanners get dashboardBanners =>
+      _dashboardBanners ??= DashboardBanners(this);
+
+  DashboardKpis? _dashboardKpis;
+
+  /// The dashboard KPI endpoints, bound to this client.
+  DashboardKpis get dashboardKpis => _dashboardKpis ??= DashboardKpis(this);
+
+  DashboardReports? _dashboardReports;
+
+  /// The dashboard report endpoints, bound to this client.
+  DashboardReports get dashboardReports =>
+      _dashboardReports ??= DashboardReports(this);
+
+  DashboardSections? _dashboardSections;
+
+  /// The dashboard section endpoints, bound to this client.
+  DashboardSections get dashboardSections =>
+      _dashboardSections ??= DashboardSections(this);
+
+  Dashboards? _dashboards;
+
+  /// The dashboard layout endpoints, bound to this client.
+  Dashboards get dashboards => _dashboards ??= Dashboards(this);
 
   DiscountProfiles? _discountProfiles;
 
@@ -379,6 +438,11 @@ class WebCommanderClient {
 
   /// The email endpoints, bound to this client.
   Email get email => _email ??= Email(this);
+
+  GiftCards? _giftCards;
+
+  /// The gift card endpoints, bound to this client.
+  GiftCards get giftCards => _giftCards ??= GiftCards(this);
 
   CommonSettingsResource? _commonSettings;
 

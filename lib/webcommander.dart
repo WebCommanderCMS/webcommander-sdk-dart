@@ -332,6 +332,113 @@ export 'src/resources/customers/admin_customers_dto.dart'
         StoreCreditAdjustment,
         StoreCreditAdjustmentInput;
 export 'src/resources/customers/admin_customers_urls.dart' show CustomerUrls;
+export 'src/resources/dashboard_banners/dashboard_banners.dart'
+    show
+        DashboardBanners,
+        createDashboardBanner,
+        deleteDashboardBanner,
+        getDashboardBanner,
+        getDashboardContentInfo,
+        listDashboardBanners,
+        patchDashboardBanner;
+export 'src/resources/dashboard_banners/dashboard_banners_dto.dart'
+    show
+        BannerContact,
+        BannerLearnMore,
+        BannerStep,
+        BannerTryIt,
+        DashboardBanner,
+        DashboardBannerInput,
+        DashboardBannerListing,
+        DashboardContentInfo;
+export 'src/resources/dashboard_banners/dashboard_banners_urls.dart'
+    show DashboardBannerUrls;
+export 'src/resources/dashboard_kpis/dashboard_kpis.dart'
+    show
+        DashboardKpis,
+        getDashboardKpiOptions,
+        getDashboardKpiSelection,
+        updateDashboardKpiSelection;
+export 'src/resources/dashboard_kpis/dashboard_kpis_dto.dart'
+    show
+        DashboardRef,
+        KpiGroup,
+        KpiMetric,
+        KpiOptions,
+        KpiPeriod,
+        KpiSelection,
+        KpiSelectionInput,
+        KpiTile;
+export 'src/resources/dashboard_kpis/dashboard_kpis_urls.dart'
+    show DashboardKpiUrls;
+export 'src/resources/dashboard_reports/dashboard_reports.dart'
+    show
+        DashboardReports,
+        getDashboardReportQuick,
+        getDashboardReportSales,
+        getDashboardReportSummary,
+        headDashboardReportQuick,
+        headDashboardReportSales,
+        headDashboardReportSummary;
+export 'src/resources/dashboard_reports/dashboard_reports_dto.dart'
+    show
+        BestSellingProduct,
+        DashboardOrderCount,
+        MostVisitedProduct,
+        OrderUpdates,
+        QuickReport,
+        ReportCustomers,
+        ReportEntity,
+        ReportKpi,
+        ReportOrders,
+        ReportPageViews,
+        ReportPeriod,
+        ReportProducts,
+        ReportSales,
+        ReportViewItem,
+        ReportViews,
+        SalesReport,
+        SalesRow,
+        SalesTotals,
+        SummaryReport;
+export 'src/resources/dashboard_reports/dashboard_reports_urls.dart'
+    show DashboardReportUrls;
+export 'src/resources/dashboard_sections/dashboard_sections.dart'
+    show DashboardSections, getDashboardSection;
+export 'src/resources/dashboard_sections/dashboard_sections_dto.dart'
+    show
+        DashboardSectionReport,
+        SectionBestSeller,
+        SectionContentUpdate,
+        SectionDraft,
+        SectionDrafts,
+        SectionEntity,
+        SectionNeedsAttention,
+        SectionOrderUpdates,
+        SectionPeriod,
+        SectionTopPage,
+        SectionViewedPost;
+export 'src/resources/dashboard_sections/dashboard_sections_urls.dart'
+    show DashboardSectionUrls;
+export 'src/resources/dashboards/dashboards.dart'
+    show
+        Dashboards,
+        createDashboard,
+        deleteDashboard,
+        getDashboard,
+        listDashboards,
+        patchDashboard;
+export 'src/resources/dashboards/dashboards_dto.dart'
+    show
+        Dashboard,
+        DashboardInput,
+        DashboardKpi,
+        DashboardListing,
+        DashboardPart,
+        DashboardSection,
+        DashboardSummary,
+        DashboardTab;
+export 'src/resources/dashboards/dashboards_urls.dart' show DashboardUrls;
 export 'src/resources/discount_profiles/discount_profiles.dart'
     show
         DiscountProfiles,
@@ -363,6 +470,10 @@ export 'src/resources/email/email.dart' show Email, sendEmail;
 export 'src/resources/email/email_dto.dart'
     show EmailInput, EmailRejection, EmailSendResult;
 export 'src/resources/email/email_urls.dart' show EmailUrls;
+export 'src/resources/gift_cards/gift_cards.dart' show GiftCards, listGiftCards;
+export 'src/resources/gift_cards/gift_cards_dto.dart'
+    show GiftCard, GiftCardPage, GiftCardPagination;
+export 'src/resources/gift_cards/gift_cards_urls.dart' show GiftCardUrls;
 export 'src/resources/inventory_locations/inventory_locations.dart'
     show
         InventoryLocations,
@@ -419,6 +530,33 @@ export 'src/resources/order_flags/order_flags.dart'
 export 'src/resources/order_flags/order_flags_dto.dart'
     show OrderFlagInput, OrderFlagPage, OrderFlagPagination, OrderFlagRecord;
 export 'src/resources/order_flags/order_flags_urls.dart' show OrderFlagUrls;
+export 'src/resources/order_previews/order_previews.dart'
+    show
+        OrderPreviews,
+        applyOrderPreviewCoupon,
+        applyOrderPreviewGiftCard,
+        confirmOrderPreview,
+        createOrderPreview,
+        getOrderPreview,
+        removeOrderPreviewCoupon,
+        removeOrderPreviewGiftCard;
+export 'src/resources/order_previews/order_previews_dto.dart'
+    show
+        OrderPreview,
+        OrderPreviewCodeInput,
+        OrderPreviewConfirmInput,
+        OrderPreviewInput,
+        OrderPreviewPaymentInput,
+        PreviewCoupon,
+        PreviewCustomer,
+        PreviewDiscounts,
+        PreviewGiftCard,
+        PreviewItem,
+        PreviewSession,
+        PreviewShipping,
+        PreviewTotals;
+export 'src/resources/order_previews/order_previews_urls.dart'
+    show OrderPreviewUrls;
 export 'src/resources/orders/orders.dart'
     show
         Orders,
@@ -573,15 +711,32 @@ export 'src/resources/payment_gateways/payment_gateways_urls.dart'
 export 'src/resources/products/products.dart'
     show
         Products,
+        bulkDeleteProducts,
+        checkProductSku,
+        countProducts,
         createProduct,
+        createProductImage,
+        createProductInventory,
+        createProductMedia,
         deleteProduct,
+        deleteProductMediaImage,
+        deleteProductReview,
         deleteProductStockLocation,
         getProduct,
+        getProductReview,
+        getProductSeo,
         getProductStock,
         importProductReviews,
+        listProductReviews,
+        listProductStockAdjustments,
         listProducts,
+        listSpecialProducts,
         patchProduct,
+        patchProductMediaImage,
+        patchProductReview,
+        patchProductStock,
         updateProduct,
+        updateProductMediaOrder,
         updateProductStock;
 export 'src/resources/products/products_dto.dart'
     show
@@ -592,6 +747,7 @@ export 'src/resources/products/products_dto.dart'
         ProductAvailableForPurchase,
         ProductAvailableForPurchaseInput,
         ProductAvailableOnWeekdays,
+        ProductBulkDeleteError,
         ProductBundle,
         ProductCategory,
         ProductCombination,
@@ -601,6 +757,7 @@ export 'src/resources/products/products_dto.dart'
         ProductCombinationOptionType,
         ProductCombinationPriceAndStock,
         ProductCombinedStockLimit,
+        ProductCount,
         ProductCustomProperty,
         ProductDimension,
         ProductExpectToPay,
@@ -609,8 +766,14 @@ export 'src/resources/products/products_dto.dart'
         ProductIdentifiers,
         ProductImage,
         ProductImageAndVideo,
+        ProductImageAndVideoInput,
+        ProductImageFileInput,
+        ProductImageUploadInput,
         ProductInput,
         ProductInventoryBlock,
+        ProductInventoryInput,
+        ProductInventoryResult,
+        ProductInventoryStockInput,
         ProductInventoryTracking,
         ProductLink,
         ProductLinks,
@@ -618,6 +781,11 @@ export 'src/resources/products/products_dto.dart'
         ProductMedia,
         ProductMediaBlockImage,
         ProductMediaBlockVideo,
+        ProductMediaImagePatchInput,
+        ProductMediaOrder,
+        ProductMediaOrderInput,
+        ProductMediaUploadInput,
+        ProductMediaUploaded,
         ProductMediaVideo,
         ProductNamedReference,
         ProductOnSale,
@@ -634,6 +802,8 @@ export 'src/resources/products/products_dto.dart'
         ProductRestrictions,
         ProductReview,
         ProductReviewInput,
+        ProductReviewList,
+        ProductReviewPatchInput,
         ProductReviewer,
         ProductReviews,
         ProductReviewsImportInput,
@@ -642,12 +812,36 @@ export 'src/resources/products/products_dto.dart'
         ProductSelectedCustomer,
         ProductSelectedCustomers,
         ProductSelectedCustomersInput,
+        ProductSeo,
+        ProductSeoAdvancedSettings,
+        ProductSeoAiVisibility,
+        ProductSeoAnalytics,
+        ProductSeoCode,
         ProductSeoConfig,
+        ProductSeoCustomCode,
+        ProductSeoFacebookPixel,
+        ProductSeoFacebookPixelEvents,
+        ProductSeoGoogleAds,
+        ProductSeoGoogleAnalytics,
+        ProductSeoGoogleAnalyticsEvents,
+        ProductSeoSocial,
+        ProductSeoSocialCard,
         ProductShipping,
+        ProductSkuCheck,
+        ProductSkuHolder,
+        ProductSpecial,
+        ProductSpecialPage,
         ProductStock,
+        ProductStockAdjustment,
+        ProductStockAdjustmentPage,
+        ProductStockAdjustmentUser,
         ProductStockInput,
         ProductStockLocation,
         ProductStockLocationInput,
+        ProductStockPatchInput,
+        ProductStockPatchResult,
+        ProductStockSummary,
+        ProductStockTracking,
         ProductStockVariation,
         ProductStorefrontUrls,
         ProductTag,
@@ -661,22 +855,27 @@ export 'src/resources/products/products_dto.dart'
         ProductWarehouseStock,
         ProductWebtool,
         ProductWeekday,
-        ProductWeekdayWindow;
+        ProductWeekdayWindow,
+        ProductsBulkDeleteInput,
+        ProductsBulkDeleteResult;
 export 'src/resources/products/products_urls.dart' show ProductUrls;
 export 'src/resources/settings/animation_effects/animation_effects.dart'
     show
         AnimationEffectsSettings,
+        deleteAnimationEffectsCustomLoader,
         getAnimationEffects,
         getAnimationEffectsSection,
         headAnimationEffects,
         patchAnimationEffects,
-        patchAnimationEffectsSection;
+        patchAnimationEffectsSection,
+        uploadAnimationEffectsCustomLoader;
 export 'src/resources/settings/animation_effects/animation_effects_dto.dart'
     show
         AnimationEffects,
         AnimationEffectsGroupMeta,
         AnimationEffectsSectionMeta,
         CustomLoader,
+        CustomLoaderSection,
         ImageLazyEffect,
         PageSkeleton,
         PageTransition,
@@ -853,7 +1052,8 @@ export 'src/resources/settings/page_settings/search_result_page.dart'
         patchSearchResultPage,
         patchSearchResultPageProductPromotion,
         patchSearchResultPageProductPromotionActive,
-        patchSearchResultPageSection;
+        patchSearchResultPageSection,
+        reindexSearch;
 export 'src/resources/settings/page_settings/search_result_page_dto.dart'
     show
         ConfigureSortingOptions,
@@ -864,6 +1064,7 @@ export 'src/resources/settings/page_settings/search_result_page_dto.dart'
         ProductPromotion,
         ProductPromotionPreview,
         Reinitialise,
+        SearchReindex,
         SearchResultPage,
         SearchResultPageGroupMeta,
         SearchResultPageSectionMeta,
@@ -1108,6 +1309,82 @@ export 'src/resources/shipping_methods/shipping_methods_dto.dart'
         ShippingMethodPagination;
 export 'src/resources/shipping_methods/shipping_methods_urls.dart'
     show ShippingMethodUrls;
+export 'src/resources/shipping_profiles/shipping_profiles.dart'
+    show
+        ShippingProfiles,
+        countShippingProfiles,
+        createShippingProfile,
+        createShippingProfileWizard,
+        deleteShippingProfile,
+        getShippingProfile,
+        headShippingProfile,
+        headShippingProfiles,
+        headShippingProfilesCount,
+        listShippingProfiles,
+        patchShippingProfile,
+        updateShippingProfile;
+export 'src/resources/shipping_profiles/shipping_profiles_dto.dart'
+    show
+        ShippingProfile,
+        ShippingProfileCount,
+        ShippingProfileInput,
+        ShippingProfileListing,
+        ShippingProfilePagination,
+        ShippingProfileReference,
+        ShippingProfileRule,
+        ShippingProfileWizardInput,
+        ShippingProfileWizardRate,
+        ShippingProfileWizardRule;
+export 'src/resources/shipping_profiles/shipping_profiles_urls.dart'
+    show ShippingProfileUrls;
+export 'src/resources/shipping_rates/shipping_rates.dart'
+    show
+        ShippingRates,
+        countShippingRates,
+        createShippingRate,
+        deleteShippingRate,
+        getShippingRate,
+        headShippingRate,
+        headShippingRates,
+        headShippingRatesCount,
+        listShippingRates,
+        patchShippingRate,
+        updateShippingRate;
+export 'src/resources/shipping_rates/shipping_rates_dto.dart'
+    show
+        ShippingRate,
+        ShippingRateAdditionalRule,
+        ShippingRateCost,
+        ShippingRateCount,
+        ShippingRateInput,
+        ShippingRateListing,
+        ShippingRatePagination,
+        ShippingRateReference;
+export 'src/resources/shipping_rates/shipping_rates_urls.dart'
+    show ShippingRateUrls;
+export 'src/resources/shipping_rules/shipping_rules.dart'
+    show
+        ShippingRules,
+        countShippingRules,
+        createShippingRule,
+        deleteShippingRule,
+        getShippingRule,
+        headShippingRule,
+        headShippingRules,
+        headShippingRulesCount,
+        listShippingRules,
+        patchShippingRule,
+        updateShippingRule;
+export 'src/resources/shipping_rules/shipping_rules_dto.dart'
+    show
+        ShippingRule,
+        ShippingRuleCount,
+        ShippingRuleInput,
+        ShippingRuleListing,
+        ShippingRulePagination,
+        ShippingRuleReference;
+export 'src/resources/shipping_rules/shipping_rules_urls.dart'
+    show ShippingRuleUrls;
 export 'src/resources/tax_codes/tax_codes.dart'
     show
         TaxCodes,
@@ -1202,9 +1479,21 @@ export 'src/resources/tax_rules/tax_rules_dto.dart'
         TaxRuleZone;
 export 'src/resources/tax_rules/tax_rules_urls.dart' show TaxRuleUrls;
 export 'src/resources/tax_settings/tax_settings.dart'
-    show TaxSettingsResource, getTaxSettings, putTaxSettings;
+    show
+        TaxSettingsResource,
+        getTaxSettings,
+        headTaxSettings,
+        patchTaxSettings,
+        putTaxSettings;
 export 'src/resources/tax_settings/tax_settings_dto.dart'
-    show TaxSettings, TaxSettingsInput;
+    show
+        TaxProfileReference,
+        TaxRegion,
+        TaxRegionInput,
+        TaxSettings,
+        TaxSettingsAreaMeta,
+        TaxSettingsGroupMeta,
+        TaxSettingsInput;
 export 'src/resources/tax_settings/tax_settings_urls.dart' show TaxSettingsUrls;
 export 'src/resources/tax_zones/tax_zones.dart'
     show
@@ -1250,6 +1539,7 @@ export 'src/resources/trash/trash.dart'
         bulkDeleteTrash,
         bulkRestoreTrash,
         deleteTrashItem,
+        getTrashItemExternalLinks,
         headTrash,
         headTrashTypes,
         listTrash,
@@ -1262,6 +1552,8 @@ export 'src/resources/trash/trash_dto.dart'
         TrashBulkInput,
         TrashBulkItemInput,
         TrashBulkRestoreResult,
+        TrashExternalLink,
+        TrashExternalLinks,
         TrashItem,
         TrashPage,
         TrashPagination,
@@ -1272,14 +1564,18 @@ export 'src/resources/variations/variations.dart'
     show
         VariationsResource,
         createVariation,
+        deleteProductVariation,
+        deleteProductVariations,
         deleteVariation,
         deleteVariationOption,
+        getProductVariation,
         getVariation,
         headVariation,
         headVariations,
         importProductVariations,
         listProductVariations,
         listVariations,
+        patchProductVariation,
         patchVariation,
         updateProductVariations,
         updateVariation;
@@ -1287,12 +1583,16 @@ export 'src/resources/variations/variations_dto.dart'
     show
         ProductVariant,
         ProductVariantBadges,
+        ProductVariantDetail,
         ProductVariantDimensions,
         ProductVariantExpectToPay,
         ProductVariantInput,
         ProductVariantInventory,
         ProductVariantOptionReference,
         ProductVariantOrdering,
+        ProductVariantPatchInput,
+        ProductVariantPatchResult,
+        ProductVariantPatched,
         ProductVariantPricing,
         ProductVariantUpdate,
         ProductVariationGroup,

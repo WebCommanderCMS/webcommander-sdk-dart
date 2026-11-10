@@ -1068,7 +1068,8 @@ class ProductCustomProperty extends Dto {
 }
 
 /// One review on the product. `product_id`, `comment` and `created_at` repeat
-/// `productId`, `review` and `date`; `created_at` carries a `Z`.
+/// `productId`, `review` and `date`; `created_at` carries a `Z`. A single review
+/// answers under `review`, which inside a row is its text.
 class ProductReview extends Dto {
   const ProductReview({
     this.id,
@@ -1086,9 +1087,9 @@ class ProductReview extends Dto {
     this.createdAt,
   });
 
-  /// Reads one entry of `reviews`.
+  /// Reads one entry of `reviews`, or a single review's `review` envelope.
   static ProductReview? fromMap(Object? body) {
-    final source = readRecord(body);
+    final source = readRecord(body, envelopeKey: 'review');
     if (source == null) return null;
     return ProductReview(
       id: readInteger(source['id']),
@@ -3996,5 +3997,1337 @@ class ProductStockInput extends Dto {
   Map<String, Object?> get fields => <String, Object?>{
         'note': note,
         'locations': locations,
+      };
+}
+
+/// The count's answer; `count` repeats `total`.
+class ProductCount extends Dto {
+  const ProductCount({this.total, this.count});
+
+  /// Reads the count body.
+  static ProductCount? fromMap(Object? body) {
+    final source = readRecord(body);
+    if (source == null) return null;
+    return ProductCount(
+      total: readInteger(source['total']),
+      count: readInteger(source['count']),
+    );
+  }
+
+  final int? total;
+
+  final int? count;
+
+  @override
+  Map<String, Object?> get fields => <String, Object?>{
+        'total': total,
+        'count': count,
+      };
+}
+
+/// The product that holds a SKU; `status` is `trashed` for one in the trash.
+class ProductSkuHolder extends Dto {
+  const ProductSkuHolder({this.id, this.name, this.status});
+
+  /// Reads the SKU check's `product`.
+  static ProductSkuHolder? fromMap(Object? body) {
+    final source = readRecord(body);
+    if (source == null) return null;
+    return ProductSkuHolder(
+      id: readInteger(source['id']),
+      name: readText(source['name']),
+      status: readText(source['status']),
+    );
+  }
+
+  final int? id;
+
+  final String? name;
+
+  final String? status;
+
+  @override
+  Map<String, Object?> get fields => <String, Object?>{
+        'id': id,
+        'name': name,
+        'status': status,
+      };
+}
+
+/// A SKU's verdict: `available` and `is_exist` are opposites, `product` and
+/// `id` name the holder and are `null` or absent when the SKU is free. A
+/// variant's SKU names the variant's own product.
+class ProductSkuCheck extends Dto {
+  const ProductSkuCheck({this.available, this.isExist, this.product, this.id});
+
+  /// Reads the SKU check body.
+  static ProductSkuCheck? fromMap(Object? body) {
+    final source = readRecord(body);
+    if (source == null) return null;
+    return ProductSkuCheck(
+      available: readFlag(source['available']),
+      isExist: readFlag(source['is_exist']),
+      product: ProductSkuHolder.fromMap(source['product']),
+      id: readInteger(source['id']),
+    );
+  }
+
+  final bool? available;
+
+  final bool? isExist;
+
+  final ProductSkuHolder? product;
+
+  final int? id;
+
+  @override
+  Map<String, Object?> get fields => <String, Object?>{
+        'available': available,
+        'is_exist': isExist,
+        'product': product,
+        'id': id,
+      };
+}
+
+/// One row of a special listing: a product's storefront prices.
+class ProductSpecial extends Dto {
+  const ProductSpecial({
+    this.id,
+    this.sku,
+    this.name,
+    this.image,
+    this.basePrice,
+    this.isOnSale,
+    this.onSaleAmountType,
+    this.effectivePrice,
+    this.actualBasePrice,
+    this.onSaleAmount,
+    this.expectToPayPrice,
+    this.expectToPayPriceWithTax,
+    this.taxExclusiveBasePrice,
+    this.taxExclusiveSalePrice,
+    this.tax,
+    this.previousPriceToDisplay,
+    this.actualPriceToDisplay,
+    this.salePrice,
+    this.updated,
+    this.url,
+    this.summary,
+    this.description,
+  });
+
+  /// Reads one entry of a special listing's `products`.
+  static ProductSpecial? fromMap(Object? body) {
+    final source = readRecord(body);
+    if (source == null) return null;
+    return ProductSpecial(
+      id: readInteger(source['id']),
+      sku: readText(source['sku']),
+      name: readText(source['name']),
+      image: readText(source['image']),
+      basePrice: readDecimal(source['base_price']),
+      isOnSale: readFlag(source['is_on_sale']),
+      onSaleAmountType: readText(source['on_sale_amount_type']),
+      effectivePrice: readDecimal(source['effective_price']),
+      actualBasePrice: readDecimal(source['actual_base_price']),
+      onSaleAmount: readDecimal(source['on_sale_amount']),
+      expectToPayPrice: readDecimal(source['expect_to_pay_price']),
+      expectToPayPriceWithTax:
+          readDecimal(source['expect_to_pay_price_with_tax']),
+      taxExclusiveBasePrice: readDecimal(source['tax_exclusive_base_price']),
+      taxExclusiveSalePrice: readDecimal(source['tax_exclusive_sale_price']),
+      tax: readDecimal(source['tax']),
+      previousPriceToDisplay: readDecimal(source['previous_price_to_display']),
+      actualPriceToDisplay: readDecimal(source['actual_price_to_display']),
+      salePrice: readDecimal(source['sale_price']),
+      updated: readText(source['updated']),
+      url: readText(source['url']),
+      summary: readText(source['summary']),
+      description: readText(source['description']),
+    );
+  }
+
+  final int? id;
+
+  final String? sku;
+
+  final String? name;
+
+  final String? image;
+
+  final double? basePrice;
+
+  final bool? isOnSale;
+
+  final String? onSaleAmountType;
+
+  final double? effectivePrice;
+
+  final double? actualBasePrice;
+
+  final double? onSaleAmount;
+
+  final double? expectToPayPrice;
+
+  final double? expectToPayPriceWithTax;
+
+  final double? taxExclusiveBasePrice;
+
+  final double? taxExclusiveSalePrice;
+
+  final double? tax;
+
+  final double? previousPriceToDisplay;
+
+  final double? actualPriceToDisplay;
+
+  final double? salePrice;
+
+  final String? updated;
+
+  final String? url;
+
+  final String? summary;
+
+  final String? description;
+
+  @override
+  Map<String, Object?> get fields => <String, Object?>{
+        'id': id,
+        'sku': sku,
+        'name': name,
+        'image': image,
+        'base_price': basePrice,
+        'is_on_sale': isOnSale,
+        'on_sale_amount_type': onSaleAmountType,
+        'effective_price': effectivePrice,
+        'actual_base_price': actualBasePrice,
+        'on_sale_amount': onSaleAmount,
+        'expect_to_pay_price': expectToPayPrice,
+        'expect_to_pay_price_with_tax': expectToPayPriceWithTax,
+        'tax_exclusive_base_price': taxExclusiveBasePrice,
+        'tax_exclusive_sale_price': taxExclusiveSalePrice,
+        'tax': tax,
+        'previous_price_to_display': previousPriceToDisplay,
+        'actual_price_to_display': actualPriceToDisplay,
+        'sale_price': salePrice,
+        'updated': updated,
+        'url': url,
+        'summary': summary,
+        'description': description,
+      };
+}
+
+/// A special listing. `max` is the page size applied; `status` is `success` on
+/// a per-customer answer with no rows, and absent otherwise.
+class ProductSpecialPage extends Dto {
+  const ProductSpecialPage({
+    this.status,
+    this.total,
+    this.max,
+    this.offset,
+    this.products,
+    this.pagination,
+  });
+
+  /// Reads a special listing body.
+  static ProductSpecialPage? fromMap(Object? body) {
+    final source = readRecord(body);
+    if (source == null) return null;
+    return ProductSpecialPage(
+      status: readText(source['status']),
+      total: readInteger(source['total']),
+      max: readInteger(source['max']),
+      offset: readInteger(source['offset']),
+      products:
+          readList<ProductSpecial>(source['products'], ProductSpecial.fromMap),
+      pagination: ProductPagination.fromMap(source['pagination']),
+    );
+  }
+
+  final String? status;
+
+  final int? total;
+
+  final int? max;
+
+  final int? offset;
+
+  final List<ProductSpecial?>? products;
+
+  final ProductPagination? pagination;
+
+  @override
+  Map<String, Object?> get fields => <String, Object?>{
+        'status': status,
+        'total': total,
+        'max': max,
+        'offset': offset,
+        'products': products,
+        'pagination': pagination,
+      };
+}
+
+/// The bulk delete's body, no envelope: `ids` is required and must not be
+/// empty.
+class ProductsBulkDeleteInput extends Dto {
+  const ProductsBulkDeleteInput({this.ids});
+
+  final List<int?>? ids;
+
+  @override
+  Map<String, Object?> get fields => <String, Object?>{
+        'ids': ids,
+      };
+}
+
+/// One id the bulk delete did not trash; `reason` is `not_found` for an unknown
+/// id.
+class ProductBulkDeleteError extends Dto {
+  const ProductBulkDeleteError({this.id, this.reason});
+
+  /// Reads one entry of the bulk delete's `errors`.
+  static ProductBulkDeleteError? fromMap(Object? body) {
+    final source = readRecord(body);
+    if (source == null) return null;
+    return ProductBulkDeleteError(
+      id: readInteger(source['id']),
+      reason: readText(source['reason']),
+    );
+  }
+
+  final int? id;
+
+  final String? reason;
+
+  @override
+  Map<String, Object?> get fields => <String, Object?>{
+        'id': id,
+        'reason': reason,
+      };
+}
+
+/// The bulk delete's answer, `200` even when an id failed: counts, and the
+/// failed ids.
+class ProductsBulkDeleteResult extends Dto {
+  const ProductsBulkDeleteResult({this.deleted, this.failed, this.errors});
+
+  /// Reads the bulk delete's body.
+  static ProductsBulkDeleteResult? fromMap(Object? body) {
+    final source = readRecord(body);
+    if (source == null) return null;
+    return ProductsBulkDeleteResult(
+      deleted: readInteger(source['deleted']),
+      failed: readInteger(source['failed']),
+      errors: readList<ProductBulkDeleteError>(
+          source['errors'], ProductBulkDeleteError.fromMap),
+    );
+  }
+
+  final int? deleted;
+
+  final int? failed;
+
+  final List<ProductBulkDeleteError?>? errors;
+
+  @override
+  Map<String, Object?> get fields => <String, Object?>{
+        'deleted': deleted,
+        'failed': failed,
+        'errors': errors,
+      };
+}
+
+/// One product's reviews; the listing has no paging block.
+class ProductReviewList extends Dto {
+  const ProductReviewList({this.reviews});
+
+  /// Reads the review listing's body.
+  static ProductReviewList? fromMap(Object? body) {
+    final source = readRecord(body);
+    if (source == null) return null;
+    return ProductReviewList(
+      reviews:
+          readList<ProductReview>(source['reviews'], ProductReview.fromMap),
+    );
+  }
+
+  final List<ProductReview?>? reviews;
+
+  @override
+  Map<String, Object?> get fields => <String, Object?>{
+        'reviews': reviews,
+      };
+}
+
+/// The review moderation body, no envelope; `status` is `pending` or
+/// `approved`.
+class ProductReviewPatchInput extends Dto {
+  const ProductReviewPatchInput({this.status, this.rating, this.comment});
+
+  final String? status;
+
+  final double? rating;
+
+  final String? comment;
+
+  @override
+  Map<String, Object?> get fields => <String, Object?>{
+        'status': status,
+        'rating': rating,
+        'comment': comment,
+      };
+}
+
+/// One image to store: `filename` and its `base64` content.
+class ProductImageFileInput extends Dto {
+  const ProductImageFileInput({this.filename, this.base64});
+
+  final String? filename;
+
+  final String? base64;
+
+  @override
+  Map<String, Object?> get fields => <String, Object?>{
+        'filename': filename,
+        'base64': base64,
+      };
+}
+
+/// The `image_and_video` block of an image upload.
+class ProductImageAndVideoInput extends Dto {
+  const ProductImageAndVideoInput({this.images});
+
+  final List<ProductImageFileInput?>? images;
+
+  @override
+  Map<String, Object?> get fields => <String, Object?>{
+        'images': images,
+      };
+}
+
+/// The image upload's body, `{"product": {"image_and_video": {"images":
+/// [...]}}}`.
+class ProductImageUploadInput extends Dto {
+  const ProductImageUploadInput({this.imageAndVideo});
+
+  final ProductImageAndVideoInput? imageAndVideo;
+
+  @override
+  String? get envelopeKey => 'product';
+
+  @override
+  Map<String, Object?> get fields => <String, Object?>{
+        'image_and_video': imageAndVideo,
+      };
+}
+
+/// What `createProductImage` answers: `product` holds the files just stored,
+/// `transaction_no` is the product's own.
+class ProductMediaUploaded extends Dto {
+  const ProductMediaUploaded({this.product, this.transactionNo});
+
+  /// Reads an upload's body.
+  static ProductMediaUploaded? fromMap(Object? body) {
+    final source = readRecord(body);
+    if (source == null) return null;
+    return ProductMediaUploaded(
+      product: ProductImageAndVideo.fromMap(source['product']),
+      transactionNo: readText(source['transaction_no']),
+    );
+  }
+
+  final ProductImageAndVideo? product;
+
+  final String? transactionNo;
+
+  @override
+  Map<String, Object?> get fields => <String, Object?>{
+        'product': product,
+        'transaction_no': transactionNo,
+      };
+}
+
+/// The media upload's body, no envelope: `type` (only `images` is accepted),
+/// `filename` and `content`, base64 or a `data:` URI, and an optional 1-based
+/// `position`.
+class ProductMediaUploadInput extends Dto {
+  const ProductMediaUploadInput(
+      {this.type, this.filename, this.content, this.position});
+
+  final String? type;
+
+  final String? filename;
+
+  final String? content;
+
+  final int? position;
+
+  @override
+  Map<String, Object?> get fields => <String, Object?>{
+        'type': type,
+        'filename': filename,
+        'content': content,
+        'position': position,
+      };
+}
+
+/// The stock figures a top-up writes.
+class ProductInventoryStockInput extends Dto {
+  const ProductInventoryStockInput(
+      {this.trackInventory, this.availableStock, this.lowLevelStock});
+
+  final bool? trackInventory;
+
+  final int? availableStock;
+
+  final int? lowLevelStock;
+
+  @override
+  Map<String, Object?> get fields => <String, Object?>{
+        'track_inventory': trackInventory,
+        'available_stock': availableStock,
+        'low_level_stock': lowLevelStock,
+      };
+}
+
+/// The top-up's body, `{"product": {"product_pricing_and_stock": {...}}}`.
+class ProductInventoryInput extends Dto {
+  const ProductInventoryInput({this.productPricingAndStock});
+
+  final ProductInventoryStockInput? productPricingAndStock;
+
+  @override
+  String? get envelopeKey => 'product';
+
+  @override
+  Map<String, Object?> get fields => <String, Object?>{
+        'product_pricing_and_stock': productPricingAndStock,
+      };
+}
+
+/// The top-up's answer. `transaction_no` is the product's own from before the
+/// write, `null` on its first top-up, though the header is stored on the
+/// product by then.
+class ProductInventoryResult extends Dto {
+  const ProductInventoryResult({this.status, this.message, this.transactionNo});
+
+  /// Reads the top-up's body.
+  static ProductInventoryResult? fromMap(Object? body) {
+    final source = readRecord(body);
+    if (source == null) return null;
+    return ProductInventoryResult(
+      status: readText(source['status']),
+      message: readText(source['message']),
+      transactionNo: readText(source['transaction_no']),
+    );
+  }
+
+  final String? status;
+
+  final String? message;
+
+  final String? transactionNo;
+
+  @override
+  Map<String, Object?> get fields => <String, Object?>{
+        'status': status,
+        'message': message,
+        'transaction_no': transactionNo,
+      };
+}
+
+/// The media order body, no envelope: `type` `images` and every image's `id`
+/// once, in the order wanted.
+class ProductMediaOrderInput extends Dto {
+  const ProductMediaOrderInput({this.type, this.ids});
+
+  final String? type;
+
+  final List<int?>? ids;
+
+  @override
+  Map<String, Object?> get fields => <String, Object?>{
+        'type': type,
+        'ids': ids,
+      };
+}
+
+/// The media order's answer: the product's images in their new order.
+class ProductMediaOrder extends Dto {
+  const ProductMediaOrder({this.images});
+
+  /// Reads the media order's answer.
+  static ProductMediaOrder? fromMap(Object? body) {
+    final source = readRecord(body);
+    if (source == null) return null;
+    return ProductMediaOrder(
+      images: readList<ProductMediaBlockImage>(
+          source['images'], ProductMediaBlockImage.fromMap),
+    );
+  }
+
+  final List<ProductMediaBlockImage?>? images;
+
+  @override
+  Map<String, Object?> get fields => <String, Object?>{
+        'images': images,
+      };
+}
+
+/// The image move body, no envelope: the 1-based `position`, the only field it
+/// takes.
+class ProductMediaImagePatchInput extends Dto {
+  const ProductMediaImagePatchInput({this.position});
+
+  final int? position;
+
+  @override
+  Map<String, Object?> get fields => <String, Object?>{
+        'position': position,
+      };
+}
+
+/// The robots and canonical URL settings.
+class ProductSeoAdvancedSettings extends Dto {
+  const ProductSeoAdvancedSettings({
+    this.enabled,
+    this.robotsMeta,
+    this.canonicalUrl,
+  });
+
+  /// Reads one record.
+  static ProductSeoAdvancedSettings? fromMap(Object? body) {
+    final source = readRecord(body);
+    if (source == null) return null;
+    return ProductSeoAdvancedSettings(
+      enabled: readFlag(source['enabled']),
+      robotsMeta: readText(source['robots_meta']),
+      canonicalUrl: readText(source['canonical_url']),
+    );
+  }
+
+  final bool? enabled;
+
+  final String? robotsMeta;
+
+  final String? canonicalUrl;
+
+  @override
+  Map<String, Object?> get fields => <String, Object?>{
+        'enabled': enabled,
+        'robots_meta': robotsMeta,
+        'canonical_url': canonicalUrl,
+      };
+}
+
+/// Which Google Analytics events the product page sends.
+class ProductSeoGoogleAnalyticsEvents extends Dto {
+  const ProductSeoGoogleAnalyticsEvents({
+    this.enabled,
+    this.viewItem,
+    this.viewItemList,
+    this.viewCart,
+    this.addToWishList,
+    this.removeFromCart,
+    this.beginCheckout,
+    this.addShippingInfo,
+    this.addPaymentInfo,
+    this.purchase,
+  });
+
+  /// Reads one record.
+  static ProductSeoGoogleAnalyticsEvents? fromMap(Object? body) {
+    final source = readRecord(body);
+    if (source == null) return null;
+    return ProductSeoGoogleAnalyticsEvents(
+      enabled: readFlag(source['enabled']),
+      viewItem: readFlag(source['view_item']),
+      viewItemList: readFlag(source['view_item_list']),
+      viewCart: readFlag(source['view_cart']),
+      addToWishList: readFlag(source['add_to_wish_list']),
+      removeFromCart: readFlag(source['remove_from_cart']),
+      beginCheckout: readFlag(source['begin_checkout']),
+      addShippingInfo: readFlag(source['add_shipping_info']),
+      addPaymentInfo: readFlag(source['add_payment_info']),
+      purchase: readFlag(source['purchase']),
+    );
+  }
+
+  final bool? enabled;
+
+  final bool? viewItem;
+
+  final bool? viewItemList;
+
+  final bool? viewCart;
+
+  final bool? addToWishList;
+
+  final bool? removeFromCart;
+
+  final bool? beginCheckout;
+
+  final bool? addShippingInfo;
+
+  final bool? addPaymentInfo;
+
+  final bool? purchase;
+
+  @override
+  Map<String, Object?> get fields => <String, Object?>{
+        'enabled': enabled,
+        'view_item': viewItem,
+        'view_item_list': viewItemList,
+        'view_cart': viewCart,
+        'add_to_wish_list': addToWishList,
+        'remove_from_cart': removeFromCart,
+        'begin_checkout': beginCheckout,
+        'add_shipping_info': addShippingInfo,
+        'add_payment_info': addPaymentInfo,
+        'purchase': purchase,
+      };
+}
+
+/// Google Analytics on the product page.
+class ProductSeoGoogleAnalytics extends Dto {
+  const ProductSeoGoogleAnalytics({
+    this.enabled,
+    this.measurementId,
+    this.events,
+  });
+
+  /// Reads one record.
+  static ProductSeoGoogleAnalytics? fromMap(Object? body) {
+    final source = readRecord(body);
+    if (source == null) return null;
+    return ProductSeoGoogleAnalytics(
+      enabled: readFlag(source['enabled']),
+      measurementId: readText(source['measurement_id']),
+      events: ProductSeoGoogleAnalyticsEvents.fromMap(source['events']),
+    );
+  }
+
+  final bool? enabled;
+
+  final String? measurementId;
+
+  final ProductSeoGoogleAnalyticsEvents? events;
+
+  @override
+  Map<String, Object?> get fields => <String, Object?>{
+        'enabled': enabled,
+        'measurement_id': measurementId,
+        'events': events,
+      };
+}
+
+/// Which Facebook Pixel events the product page sends.
+class ProductSeoFacebookPixelEvents extends Dto {
+  const ProductSeoFacebookPixelEvents({
+    this.enabled,
+    this.search,
+    this.addToCart,
+    this.addToWishList,
+    this.initiateCheckout,
+    this.addPaymentInfo,
+    this.purchase,
+  });
+
+  /// Reads one record.
+  static ProductSeoFacebookPixelEvents? fromMap(Object? body) {
+    final source = readRecord(body);
+    if (source == null) return null;
+    return ProductSeoFacebookPixelEvents(
+      enabled: readFlag(source['enabled']),
+      search: readFlag(source['search']),
+      addToCart: readFlag(source['add_to_cart']),
+      addToWishList: readFlag(source['add_to_wish_list']),
+      initiateCheckout: readFlag(source['initiate_checkout']),
+      addPaymentInfo: readFlag(source['add_payment_info']),
+      purchase: readFlag(source['purchase']),
+    );
+  }
+
+  final bool? enabled;
+
+  final bool? search;
+
+  final bool? addToCart;
+
+  final bool? addToWishList;
+
+  final bool? initiateCheckout;
+
+  final bool? addPaymentInfo;
+
+  final bool? purchase;
+
+  @override
+  Map<String, Object?> get fields => <String, Object?>{
+        'enabled': enabled,
+        'search': search,
+        'add_to_cart': addToCart,
+        'add_to_wish_list': addToWishList,
+        'initiate_checkout': initiateCheckout,
+        'add_payment_info': addPaymentInfo,
+        'purchase': purchase,
+      };
+}
+
+/// The Facebook Pixel on the product page.
+class ProductSeoFacebookPixel extends Dto {
+  const ProductSeoFacebookPixel({
+    this.enabled,
+    this.pixelId,
+    this.events,
+  });
+
+  /// Reads one record.
+  static ProductSeoFacebookPixel? fromMap(Object? body) {
+    final source = readRecord(body);
+    if (source == null) return null;
+    return ProductSeoFacebookPixel(
+      enabled: readFlag(source['enabled']),
+      pixelId: readText(source['pixel_id']),
+      events: ProductSeoFacebookPixelEvents.fromMap(source['events']),
+    );
+  }
+
+  final bool? enabled;
+
+  final String? pixelId;
+
+  final ProductSeoFacebookPixelEvents? events;
+
+  @override
+  Map<String, Object?> get fields => <String, Object?>{
+        'enabled': enabled,
+        'pixel_id': pixelId,
+        'events': events,
+      };
+}
+
+/// The Google Ads conversion the product page reports.
+class ProductSeoGoogleAds extends Dto {
+  const ProductSeoGoogleAds({this.conversionId, this.conversionLabel});
+
+  /// Reads one record.
+  static ProductSeoGoogleAds? fromMap(Object? body) {
+    final source = readRecord(body);
+    if (source == null) return null;
+    return ProductSeoGoogleAds(
+      conversionId: readText(source['conversion_id']),
+      conversionLabel: readText(source['conversion_label']),
+    );
+  }
+
+  final String? conversionId;
+
+  final String? conversionLabel;
+
+  @override
+  Map<String, Object?> get fields => <String, Object?>{
+        'conversion_id': conversionId,
+        'conversion_label': conversionLabel,
+      };
+}
+
+/// The product page's analytics settings.
+class ProductSeoAnalytics extends Dto {
+  const ProductSeoAnalytics({
+    this.enabled,
+    this.platform,
+    this.googleAnalytics,
+    this.facebookPixel,
+    this.googleAds,
+  });
+
+  /// Reads one record.
+  static ProductSeoAnalytics? fromMap(Object? body) {
+    final source = readRecord(body);
+    if (source == null) return null;
+    return ProductSeoAnalytics(
+      enabled: readFlag(source['enabled']),
+      platform: readText(source['platform']),
+      googleAnalytics:
+          ProductSeoGoogleAnalytics.fromMap(source['google_analytics']),
+      facebookPixel: ProductSeoFacebookPixel.fromMap(source['facebook_pixel']),
+      googleAds: ProductSeoGoogleAds.fromMap(source['google_ads']),
+    );
+  }
+
+  final bool? enabled;
+
+  final String? platform;
+
+  final ProductSeoGoogleAnalytics? googleAnalytics;
+
+  final ProductSeoFacebookPixel? facebookPixel;
+
+  final ProductSeoGoogleAds? googleAds;
+
+  @override
+  Map<String, Object?> get fields => <String, Object?>{
+        'enabled': enabled,
+        'platform': platform,
+        'google_analytics': googleAnalytics,
+        'facebook_pixel': facebookPixel,
+        'google_ads': googleAds,
+      };
+}
+
+/// One custom code block and whether it is on.
+class ProductSeoCode extends Dto {
+  const ProductSeoCode({this.enabled, this.code});
+
+  /// Reads one record.
+  static ProductSeoCode? fromMap(Object? body) {
+    final source = readRecord(body);
+    if (source == null) return null;
+    return ProductSeoCode(
+      enabled: readFlag(source['enabled']),
+      code: readText(source['code']),
+    );
+  }
+
+  final bool? enabled;
+
+  final String? code;
+
+  @override
+  Map<String, Object?> get fields => <String, Object?>{
+        'enabled': enabled,
+        'code': code,
+      };
+}
+
+/// The custom code added to the product page's header and footer.
+class ProductSeoCustomCode extends Dto {
+  const ProductSeoCustomCode({this.header, this.footer});
+
+  /// Reads one record.
+  static ProductSeoCustomCode? fromMap(Object? body) {
+    final source = readRecord(body);
+    if (source == null) return null;
+    return ProductSeoCustomCode(
+      header: ProductSeoCode.fromMap(source['header']),
+      footer: ProductSeoCode.fromMap(source['footer']),
+    );
+  }
+
+  final ProductSeoCode? header;
+
+  final ProductSeoCode? footer;
+
+  @override
+  Map<String, Object?> get fields => <String, Object?>{
+        'header': header,
+        'footer': footer,
+      };
+}
+
+/// The title, description and image one network shows for the product.
+class ProductSeoSocialCard extends Dto {
+  const ProductSeoSocialCard({
+    this.title,
+    this.description,
+    this.imageUrl,
+  });
+
+  /// Reads one record.
+  static ProductSeoSocialCard? fromMap(Object? body) {
+    final source = readRecord(body);
+    if (source == null) return null;
+    return ProductSeoSocialCard(
+      title: readText(source['title']),
+      description: readText(source['description']),
+      imageUrl: readText(source['image_url']),
+    );
+  }
+
+  final String? title;
+
+  final String? description;
+
+  final String? imageUrl;
+
+  @override
+  Map<String, Object?> get fields => <String, Object?>{
+        'title': title,
+        'description': description,
+        'image_url': imageUrl,
+      };
+}
+
+/// The product's social card, and one per network.
+class ProductSeoSocial extends Dto {
+  const ProductSeoSocial({
+    this.title,
+    this.description,
+    this.imageUrl,
+    this.facebook,
+    this.twitter,
+    this.linkedin,
+  });
+
+  /// Reads one record.
+  static ProductSeoSocial? fromMap(Object? body) {
+    final source = readRecord(body);
+    if (source == null) return null;
+    return ProductSeoSocial(
+      title: readText(source['title']),
+      description: readText(source['description']),
+      imageUrl: readText(source['image_url']),
+      facebook: ProductSeoSocialCard.fromMap(source['facebook']),
+      twitter: ProductSeoSocialCard.fromMap(source['twitter']),
+      linkedin: ProductSeoSocialCard.fromMap(source['linkedin']),
+    );
+  }
+
+  final String? title;
+
+  final String? description;
+
+  final String? imageUrl;
+
+  final ProductSeoSocialCard? facebook;
+
+  final ProductSeoSocialCard? twitter;
+
+  final ProductSeoSocialCard? linkedin;
+
+  @override
+  Map<String, Object?> get fields => <String, Object?>{
+        'title': title,
+        'description': description,
+        'image_url': imageUrl,
+        'facebook': facebook,
+        'twitter': twitter,
+        'linkedin': linkedin,
+      };
+}
+
+/// What the product offers AI search; each field is `null` until set.
+class ProductSeoAiVisibility extends Dto {
+  const ProductSeoAiVisibility({
+    this.structuredAttributes,
+    this.productFaq,
+    this.citabilityScore,
+    this.jsonLd,
+  });
+
+  /// Reads one record.
+  static ProductSeoAiVisibility? fromMap(Object? body) {
+    final source = readRecord(body);
+    if (source == null) return null;
+    return ProductSeoAiVisibility(
+      structuredAttributes: readAny(source['structured_attributes']),
+      productFaq: readAny(source['product_faq']),
+      citabilityScore: readAny(source['citability_score']),
+      jsonLd: readAny(source['json_ld']),
+    );
+  }
+
+  final Object? structuredAttributes;
+
+  final Object? productFaq;
+
+  final Object? citabilityScore;
+
+  final Object? jsonLd;
+
+  @override
+  Map<String, Object?> get fields => <String, Object?>{
+        'structured_attributes': structuredAttributes,
+        'product_faq': productFaq,
+        'citability_score': citabilityScore,
+        'json_ld': jsonLd,
+      };
+}
+
+/// A product's SEO sub-resource, under `seo`.
+class ProductSeo extends Dto {
+  const ProductSeo({
+    this.urlHandle,
+    this.title,
+    this.description,
+    this.advancedSettings,
+    this.analytics,
+    this.customCode,
+    this.social,
+    this.aiVisibility,
+  });
+
+  /// Reads the SEO body.
+  static ProductSeo? fromMap(Object? body) {
+    final source = readRecord(body, envelopeKey: 'seo');
+    if (source == null) return null;
+    return ProductSeo(
+      urlHandle: readText(source['url_handle']),
+      title: readText(source['title']),
+      description: readText(source['description']),
+      advancedSettings:
+          ProductSeoAdvancedSettings.fromMap(source['advanced_settings']),
+      analytics: ProductSeoAnalytics.fromMap(source['analytics']),
+      customCode: ProductSeoCustomCode.fromMap(source['custom_code']),
+      social: ProductSeoSocial.fromMap(source['social']),
+      aiVisibility: ProductSeoAiVisibility.fromMap(source['ai_visibility']),
+    );
+  }
+
+  final String? urlHandle;
+
+  final String? title;
+
+  final String? description;
+
+  final ProductSeoAdvancedSettings? advancedSettings;
+
+  final ProductSeoAnalytics? analytics;
+
+  final ProductSeoCustomCode? customCode;
+
+  final ProductSeoSocial? social;
+
+  final ProductSeoAiVisibility? aiVisibility;
+
+  @override
+  String? get envelopeKey => 'seo';
+
+  @override
+  Map<String, Object?> get fields => <String, Object?>{
+        'url_handle': urlHandle,
+        'title': title,
+        'description': description,
+        'advanced_settings': advancedSettings,
+        'analytics': analytics,
+        'custom_code': customCode,
+        'social': social,
+        'ai_visibility': aiVisibility,
+      };
+}
+
+/// A product's stock figure and low-stock level, with whether tracking is on.
+class ProductStockTracking extends Dto {
+  const ProductStockTracking({
+    this.enabled,
+    this.availableStock,
+    this.lowStockLevel,
+  });
+
+  /// Reads one record.
+  static ProductStockTracking? fromMap(Object? body) {
+    final source = readRecord(body);
+    if (source == null) return null;
+    return ProductStockTracking(
+      enabled: readFlag(source['enabled']),
+      availableStock: readInteger(source['available_stock']),
+      lowStockLevel: readInteger(source['low_stock_level']),
+    );
+  }
+
+  final bool? enabled;
+
+  final int? availableStock;
+
+  final int? lowStockLevel;
+
+  @override
+  Map<String, Object?> get fields => <String, Object?>{
+        'enabled': enabled,
+        'available_stock': availableStock,
+        'low_stock_level': lowStockLevel,
+      };
+}
+
+/// The stock block of the stock patch's answer.
+class ProductStockSummary extends Dto {
+  const ProductStockSummary({
+    this.tracking,
+    this.multiLocationEnabled,
+    this.locations,
+    this.variations,
+  });
+
+  /// Reads one record.
+  static ProductStockSummary? fromMap(Object? body) {
+    final source = readRecord(body);
+    if (source == null) return null;
+    return ProductStockSummary(
+      tracking: ProductStockTracking.fromMap(source['tracking']),
+      multiLocationEnabled: readFlag(source['multi_location_enabled']),
+      locations: readList<ProductStockLocation>(
+          source['locations'], ProductStockLocation.fromMap),
+      variations: readList<ProductStockVariation>(
+          source['variations'], ProductStockVariation.fromMap),
+    );
+  }
+
+  final ProductStockTracking? tracking;
+
+  final bool? multiLocationEnabled;
+
+  final List<ProductStockLocation?>? locations;
+
+  final List<ProductStockVariation?>? variations;
+
+  @override
+  Map<String, Object?> get fields => <String, Object?>{
+        'tracking': tracking,
+        'multi_location_enabled': multiLocationEnabled,
+        'locations': locations,
+        'variations': variations,
+      };
+}
+
+/// The admin who made a stock change.
+class ProductStockAdjustmentUser extends Dto {
+  const ProductStockAdjustmentUser({this.id, this.name});
+
+  /// Reads one record.
+  static ProductStockAdjustmentUser? fromMap(Object? body) {
+    final source = readRecord(body);
+    if (source == null) return null;
+    return ProductStockAdjustmentUser(
+      id: readInteger(source['id']),
+      name: readText(source['name']),
+    );
+  }
+
+  final int? id;
+
+  final String? name;
+
+  @override
+  Map<String, Object?> get fields => <String, Object?>{
+        'id': id,
+        'name': name,
+      };
+}
+
+/// One stock change; `delta` is the new figure minus the old.
+class ProductStockAdjustment extends Dto {
+  const ProductStockAdjustment({
+    this.id,
+    this.delta,
+    this.note,
+    this.transactionNo,
+    this.createdBy,
+    this.createdAt,
+  });
+
+  /// Reads one record.
+  static ProductStockAdjustment? fromMap(Object? body) {
+    final source = readRecord(body);
+    if (source == null) return null;
+    return ProductStockAdjustment(
+      id: readInteger(source['id']),
+      delta: readInteger(source['delta']),
+      note: readText(source['note']),
+      transactionNo: readText(source['transaction_no']),
+      createdBy: ProductStockAdjustmentUser.fromMap(source['created_by']),
+      createdAt: readText(source['created_at']),
+    );
+  }
+
+  final int? id;
+
+  final int? delta;
+
+  final String? note;
+
+  final String? transactionNo;
+
+  final ProductStockAdjustmentUser? createdBy;
+
+  final String? createdAt;
+
+  @override
+  Map<String, Object?> get fields => <String, Object?>{
+        'id': id,
+        'delta': delta,
+        'note': note,
+        'transaction_no': transactionNo,
+        'created_by': createdBy,
+        'created_at': createdAt,
+      };
+}
+
+/// The stock patch's body, no envelope. `tracking` merges; `locations` sets the
+/// stock per location; `note` and `transaction_no` go on the adjustment.
+class ProductStockPatchInput extends Dto {
+  const ProductStockPatchInput({
+    this.tracking,
+    this.locations,
+    this.note,
+    this.transactionNo,
+  });
+
+  final ProductStockTracking? tracking;
+
+  final List<ProductStockLocationInput?>? locations;
+
+  final String? note;
+
+  final String? transactionNo;
+
+  @override
+  Map<String, Object?> get fields => <String, Object?>{
+        'tracking': tracking,
+        'locations': locations,
+        'note': note,
+        'transaction_no': transactionNo,
+      };
+}
+
+/// The stock patch's answer: the stock now, and the adjustment it recorded.
+class ProductStockPatchResult extends Dto {
+  const ProductStockPatchResult({this.stock, this.adjustment});
+
+  /// Reads the stock patch's answer.
+  static ProductStockPatchResult? fromMap(Object? body) {
+    final source = readRecord(body);
+    if (source == null) return null;
+    return ProductStockPatchResult(
+      stock: ProductStockSummary.fromMap(source['stock']),
+      adjustment: ProductStockAdjustment.fromMap(source['adjustment']),
+    );
+  }
+
+  final ProductStockSummary? stock;
+
+  final ProductStockAdjustment? adjustment;
+
+  @override
+  Map<String, Object?> get fields => <String, Object?>{
+        'stock': stock,
+        'adjustment': adjustment,
+      };
+}
+
+/// One page of a product's stock history.
+class ProductStockAdjustmentPage extends Dto {
+  const ProductStockAdjustmentPage({this.adjustments, this.pagination});
+
+  /// Reads one page of the stock history.
+  static ProductStockAdjustmentPage? fromMap(Object? body) {
+    final source = readRecord(body);
+    if (source == null) return null;
+    return ProductStockAdjustmentPage(
+      adjustments: readList<ProductStockAdjustment>(
+          source['adjustments'], ProductStockAdjustment.fromMap),
+      pagination: ProductPagination.fromMap(source['pagination']),
+    );
+  }
+
+  final List<ProductStockAdjustment?>? adjustments;
+
+  final ProductPagination? pagination;
+
+  @override
+  Map<String, Object?> get fields => <String, Object?>{
+        'adjustments': adjustments,
+        'pagination': pagination,
       };
 }

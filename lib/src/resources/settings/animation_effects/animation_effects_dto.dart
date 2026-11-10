@@ -31,6 +31,28 @@ class CustomLoader extends Dto {
       };
 }
 
+/// The `custom_loader` section: the uploaded preloader image, or `enabled:
+/// false`.
+class CustomLoaderSection extends Dto {
+  const CustomLoaderSection({this.customLoader});
+
+  /// Reads the upload's answer and the section read.
+  static CustomLoaderSection? fromMap(Object? body) {
+    final source = readRecord(body);
+    if (source == null) return null;
+    return CustomLoaderSection(
+      customLoader: CustomLoader.fromMap(source['custom_loader']),
+    );
+  }
+
+  final CustomLoader? customLoader;
+
+  @override
+  Map<String, Object?> get fields => <String, Object?>{
+        'custom_loader': customLoader,
+      };
+}
+
 /// One entry of `preloader_custom_page` as a read sends it.
 class PreloaderPage extends Dto {
   const PreloaderPage({this.id, this.name});

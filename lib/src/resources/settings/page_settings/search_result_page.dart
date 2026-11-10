@@ -90,6 +90,12 @@ class SearchResultPageSettings {
           _client, promotionId, payload,
           raiseOnError: raiseOnError, responseFormat: responseFormat);
 
+  /// Rebuild the store's search index — `POST /admin/search/reindex`.
+  Future<ApiResponse> reindexSearch(
+          {bool? raiseOnError, String? responseFormat}) =>
+      _reindexSearch(_client,
+          raiseOnError: raiseOnError, responseFormat: responseFormat);
+
   Future<ApiResponse> deleteSearchResultPageProductPromotion(Object promotionId,
           {bool? raiseOnError, String? responseFormat}) =>
       _deleteSearchResultPageProductPromotion(_client, promotionId,
@@ -253,6 +259,16 @@ Future<ApiResponse> deleteSearchResultPageProductPromotion(
         raiseOnError: raiseOnError,
         responseFormat: responseFormat);
 
+/// Rebuild the store's search index; `202` once it has started, with no body to
+/// send. `POST /admin/search/reindex`
+Future<ApiResponse> reindexSearch(WebCommanderClient client,
+        {bool? raiseOnError, String? responseFormat}) =>
+    client.sendPostRequest(SearchResultPageUrls.searchReindex,
+        raiseOnError: raiseOnError,
+        responseFormat: responseFormat,
+        dtoDecoder: SearchReindex.fromMap);
+
+final _reindexSearch = reindexSearch;
 final _getSearchResultPage = getSearchResultPage;
 final _patchSearchResultPage = patchSearchResultPage;
 final _headSearchResultPage = headSearchResultPage;

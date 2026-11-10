@@ -269,3 +269,77 @@ class TrashBulkInput extends Dto {
         'items': items,
       };
 }
+
+/// One link outside the store: the `system`, its `entity` and `external_id`, a
+/// `name` and the `reason` it blocks a permanent delete.
+class TrashExternalLink extends Dto {
+  const TrashExternalLink({
+    this.system,
+    this.entity,
+    this.name,
+    this.externalId,
+    this.reason,
+  });
+
+  /// Reads one entry of `links`.
+  static TrashExternalLink? fromMap(Object? body) {
+    final source = readRecord(body);
+    if (source == null) return null;
+    return TrashExternalLink(
+      system: readText(source['system']),
+      entity: readText(source['entity']),
+      name: readText(source['name']),
+      externalId: readText(source['external_id']),
+      reason: readText(source['reason']),
+    );
+  }
+
+  final String? system;
+
+  final String? entity;
+
+  final String? name;
+
+  final String? externalId;
+
+  final String? reason;
+
+  @override
+  Map<String, Object?> get fields => <String, Object?>{
+        'system': system,
+        'entity': entity,
+        'name': name,
+        'external_id': externalId,
+        'reason': reason,
+      };
+}
+
+/// The external links of one trashed item: its `type` and `id`, and `links`.
+class TrashExternalLinks extends Dto {
+  const TrashExternalLinks({this.type, this.id, this.links});
+
+  /// Reads the external links body.
+  static TrashExternalLinks? fromMap(Object? body) {
+    final source = readRecord(body);
+    if (source == null) return null;
+    return TrashExternalLinks(
+      type: readText(source['type']),
+      id: readInteger(source['id']),
+      links: readList<TrashExternalLink>(
+          source['links'], TrashExternalLink.fromMap),
+    );
+  }
+
+  final String? type;
+
+  final int? id;
+
+  final List<TrashExternalLink?>? links;
+
+  @override
+  Map<String, Object?> get fields => <String, Object?>{
+        'type': type,
+        'id': id,
+        'links': links,
+      };
+}

@@ -14,7 +14,7 @@ class Sdk {
 
   /// The SDK version, reported by [defaultUserAgent] and `sdkVersion`.
   // Keep in step with `version:` in pubspec.yaml.
-  static const String version = '4.0.0';
+  static const String version = '4.0.1';
 
   /// The default User-Agent sent with every request.
   static const String defaultUserAgent = 'webcommander/$version';

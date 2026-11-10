@@ -28,9 +28,10 @@ class ProfileReference extends Dto {
       };
 }
 
-/// The `group_meta` entry: what the area is and whether it can be written.
+/// One `group_meta` entry: what the area is, whether it can be written, and
+/// its path.
 class AreaMeta extends Dto {
-  const AreaMeta({this.kind, this.writable});
+  const AreaMeta({this.kind, this.writable, this.href});
 
   static AreaMeta? fromMap(Object? body) {
     final source = readRecord(body);
@@ -38,39 +39,56 @@ class AreaMeta extends Dto {
     return AreaMeta(
       kind: readText(source['kind']),
       writable: readFlag(source['writable']),
+      href: readText(source['href']),
     );
   }
 
-  /// `kind` — `"setting"` on the one entry here.
+  /// `kind` — `"setting"` on the settings entry.
   final String? kind;
 
-  /// `writable` — `true` on the one entry here.
+  /// `writable` — `true` on the settings entry.
   final bool? writable;
+
+  /// `href` — the path of the area the entry names.
+  final String? href;
 
   @override
   Map<String, Object?> get fields => <String, Object?>{
         'kind': kind,
         'writable': writable,
+        'href': href,
       };
 }
 
-/// The `group_meta` block — a single [AreaMeta], keyed by the area itself.
+/// The `group_meta` block: the settings area and the two collections beside it.
 class ShippingSettingsGroupMeta extends Dto {
-  const ShippingSettingsGroupMeta({this.shippingSettings});
+  const ShippingSettingsGroupMeta({
+    this.shippingSettings,
+    this.shippingMethods,
+    this.shippingClasses,
+  });
 
   static ShippingSettingsGroupMeta? fromMap(Object? body) {
     final source = readRecord(body);
     if (source == null) return null;
     return ShippingSettingsGroupMeta(
       shippingSettings: AreaMeta.fromMap(source['shipping_settings']),
+      shippingMethods: AreaMeta.fromMap(source['shipping_methods']),
+      shippingClasses: AreaMeta.fromMap(source['shipping_classes']),
     );
   }
 
   final AreaMeta? shippingSettings;
 
+  final AreaMeta? shippingMethods;
+
+  final AreaMeta? shippingClasses;
+
   @override
   Map<String, Object?> get fields => <String, Object?>{
         'shipping_settings': shippingSettings,
+        'shipping_methods': shippingMethods,
+        'shipping_classes': shippingClasses,
       };
 }
 
@@ -78,12 +96,12 @@ class ShippingSettingsGroupMeta extends Dto {
 class ShippingSettings extends Dto {
   const ShippingSettings({
     this.defaultShippingProfile,
-    this.enableShippingDefaultTax,
+    this.applyStoreTaxSettingsToShipping,
     this.defaultDeliveryProfile,
-    this.enableDeliveryDefaultTax,
+    this.applyStoreTaxSettingsToDelivery,
     this.shippingTaxProfile,
     this.enableShippingClass,
-    this.enableFlatViewClass,
+    this.enableClassInFlatView,
     this.groupMeta,
     this.fieldMetadata,
   });
@@ -94,14 +112,16 @@ class ShippingSettings extends Dto {
     return ShippingSettings(
       defaultShippingProfile:
           ProfileReference.fromMap(source['default_shipping_profile']),
-      enableShippingDefaultTax: readFlag(source['enable_shipping_default_tax']),
+      applyStoreTaxSettingsToShipping:
+          readFlag(source['apply_store_tax_settings_to_shipping']),
       defaultDeliveryProfile:
           ProfileReference.fromMap(source['default_delivery_profile']),
-      enableDeliveryDefaultTax: readFlag(source['enable_delivery_default_tax']),
+      applyStoreTaxSettingsToDelivery:
+          readFlag(source['apply_store_tax_settings_to_delivery']),
       shippingTaxProfile:
           ProfileReference.fromMap(source['shipping_tax_profile']),
       enableShippingClass: readFlag(source['enable_shipping_class']),
-      enableFlatViewClass: readFlag(source['enable_flat_view_class']),
+      enableClassInFlatView: readFlag(source['enable_class_in_flat_view']),
       groupMeta: ShippingSettingsGroupMeta.fromMap(source['group_meta']),
       fieldMetadata: readAny(source['field_metadata']),
     );
@@ -109,18 +129,18 @@ class ShippingSettings extends Dto {
 
   final ProfileReference? defaultShippingProfile;
 
-  final bool? enableShippingDefaultTax;
+  final bool? applyStoreTaxSettingsToShipping;
 
   final ProfileReference? defaultDeliveryProfile;
 
-  final bool? enableDeliveryDefaultTax;
+  final bool? applyStoreTaxSettingsToDelivery;
 
   final ProfileReference? shippingTaxProfile;
 
   final bool? enableShippingClass;
 
-  /// `enable_flat_view_class` — gated by [enableShippingClass], which also moves it.
-  final bool? enableFlatViewClass;
+  /// `enable_class_in_flat_view` — gated by [enableShippingClass], which also moves it.
+  final bool? enableClassInFlatView;
 
   /// `group_meta` — beside the settings on every answer this area sends.
   final ShippingSettingsGroupMeta? groupMeta;
@@ -134,12 +154,12 @@ class ShippingSettings extends Dto {
   @override
   Map<String, Object?> get fields => <String, Object?>{
         'default_shipping_profile': defaultShippingProfile,
-        'enable_shipping_default_tax': enableShippingDefaultTax,
+        'apply_store_tax_settings_to_shipping': applyStoreTaxSettingsToShipping,
         'default_delivery_profile': defaultDeliveryProfile,
-        'enable_delivery_default_tax': enableDeliveryDefaultTax,
+        'apply_store_tax_settings_to_delivery': applyStoreTaxSettingsToDelivery,
         'shipping_tax_profile': shippingTaxProfile,
         'enable_shipping_class': enableShippingClass,
-        'enable_flat_view_class': enableFlatViewClass,
+        'enable_class_in_flat_view': enableClassInFlatView,
         'group_meta': groupMeta,
         'field_metadata': fieldMetadata,
       };

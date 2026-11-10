@@ -69,6 +69,14 @@ class Trash {
           {bool? raiseOnError, String? responseFormat}) =>
       _bulkDeleteTrash(_client, payload,
           raiseOnError: raiseOnError, responseFormat: responseFormat);
+
+  /// Read the links outside the store a permanent delete would break —
+  /// `GET /admin/trash/{trash_type}/{trash_item_id}/external_links`.
+  Future<ApiResponse> getTrashItemExternalLinks(
+          String trashType, Object trashItemId,
+          {bool? raiseOnError, String? responseFormat}) =>
+      _getTrashItemExternalLinks(_client, trashType, trashItemId,
+          raiseOnError: raiseOnError, responseFormat: responseFormat);
 }
 
 /// List trashed rows, newest change first — `GET /admin/trash`. `type` (a
@@ -164,6 +172,19 @@ Future<ApiResponse> bulkDeleteTrash(WebCommanderClient client, Object payload,
         responseFormat: responseFormat,
         dtoDecoder: TrashBulkDeleteResult.fromMap);
 
+/// The links outside the store that a permanent delete of a trashed item would
+/// break; `404` for an item that is not in the trash.
+/// `GET /admin/trash/{trash_type}/{trash_item_id}/external_links`
+Future<ApiResponse> getTrashItemExternalLinks(
+        WebCommanderClient client, String trashType, Object trashItemId,
+        {bool? raiseOnError, String? responseFormat}) =>
+    client.sendGetRequest(TrashUrls.trashItemExternalLinks,
+        pathParams: {'trash_type': trashType, 'trash_item_id': trashItemId},
+        raiseOnError: raiseOnError,
+        responseFormat: responseFormat,
+        dtoDecoder: TrashExternalLinks.fromMap);
+
+final _getTrashItemExternalLinks = getTrashItemExternalLinks;
 final _listTrash = listTrash;
 final _headTrash = headTrash;
 final _listTrashTypes = listTrashTypes;

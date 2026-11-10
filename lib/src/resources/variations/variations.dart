@@ -113,6 +113,36 @@ class VariationsResource {
           queryParams: queryParams,
           raiseOnError: raiseOnError,
           responseFormat: responseFormat);
+
+  /// Read one variant of a product —
+  /// `GET /admin/products/{product_id}/variations/{variation_id}`.
+  Future<ApiResponse> getProductVariation(Object productId, Object variationId,
+          {bool? raiseOnError, String? responseFormat}) =>
+      _getProductVariation(_client, productId, variationId,
+          raiseOnError: raiseOnError, responseFormat: responseFormat);
+
+  /// Delete one variant of a product —
+  /// `DELETE /admin/products/{product_id}/variations/{variation_id}`.
+  Future<ApiResponse> deleteProductVariation(
+          Object productId, Object variationId,
+          {bool? raiseOnError, String? responseFormat}) =>
+      _deleteProductVariation(_client, productId, variationId,
+          raiseOnError: raiseOnError, responseFormat: responseFormat);
+
+  /// Change one variant of a product —
+  /// `PATCH /admin/products/{product_id}/variations/{variation_id}`.
+  Future<ApiResponse> patchProductVariation(
+          Object productId, Object variationId, Object payload,
+          {bool? raiseOnError, String? responseFormat}) =>
+      _patchProductVariation(_client, productId, variationId, payload,
+          raiseOnError: raiseOnError, responseFormat: responseFormat);
+
+  /// Delete every variant of a product —
+  /// `DELETE /admin/products/{product_id}/variations`.
+  Future<ApiResponse> deleteProductVariations(Object productId,
+          {bool? raiseOnError, String? responseFormat}) =>
+      _deleteProductVariations(_client, productId,
+          raiseOnError: raiseOnError, responseFormat: responseFormat);
 }
 
 /// List the types by ascending id — `GET /admin/variations`. Takes `search`
@@ -270,6 +300,58 @@ Future<ApiResponse> updateProductVariations(
         raiseOnError: raiseOnError,
         responseFormat: responseFormat,
         dtoDecoder: ProductVariationsBulkResult.fromMap);
+
+/// Read one variant under `variation` —
+/// `GET /admin/products/{product_id}/variations/{variation_id}`.
+/// `variation_id` is a variant's `variation_id`, the `id` the list also
+/// carries; it is not the variant's own `product_id`. It reads `active` where
+/// the list reads `available`.
+Future<ApiResponse> getProductVariation(
+        WebCommanderClient client, Object productId, Object variationId,
+        {bool? raiseOnError, String? responseFormat}) =>
+    client.sendGetRequest(VariationUrls.productVariation,
+        pathParams: {'product_id': productId, 'variation_id': variationId},
+        raiseOnError: raiseOnError,
+        responseFormat: responseFormat,
+        dtoDecoder: ProductVariantDetail.fromMap);
+
+/// Delete one variant; `204`, and a second delete is `404`. `variation_id` is a
+/// variant's `variation_id`.
+/// `DELETE /admin/products/{product_id}/variations/{variation_id}`
+Future<ApiResponse> deleteProductVariation(
+        WebCommanderClient client, Object productId, Object variationId,
+        {bool? raiseOnError, String? responseFormat}) =>
+    client.sendDeleteRequest(VariationUrls.productVariation,
+        pathParams: {'product_id': productId, 'variation_id': variationId},
+        raiseOnError: raiseOnError,
+        responseFormat: responseFormat);
+
+/// Change one variant; a bare, partial body. A SKU another variant holds is
+/// `409`. `PATCH /admin/products/{product_id}/variations/{variation_id}`
+Future<ApiResponse> patchProductVariation(WebCommanderClient client,
+        Object productId, Object variationId, Object payload,
+        {bool? raiseOnError, String? responseFormat}) =>
+    client.sendPatchRequest(VariationUrls.productVariation,
+        pathParams: {'product_id': productId, 'variation_id': variationId},
+        jsonBody: payload,
+        raiseOnError: raiseOnError,
+        responseFormat: responseFormat,
+        dtoDecoder: ProductVariantPatchResult.fromMap);
+
+/// Delete every variant of a product; `204`, also when it has none.
+/// `DELETE /admin/products/{product_id}/variations`
+Future<ApiResponse> deleteProductVariations(
+        WebCommanderClient client, Object productId,
+        {bool? raiseOnError, String? responseFormat}) =>
+    client.sendDeleteRequest(VariationUrls.productVariations,
+        pathParams: {'product_id': productId},
+        raiseOnError: raiseOnError,
+        responseFormat: responseFormat);
+
+final _patchProductVariation = patchProductVariation;
+final _deleteProductVariations = deleteProductVariations;
+final _getProductVariation = getProductVariation;
+final _deleteProductVariation = deleteProductVariation;
 
 final _listVariations = listVariations;
 final _headVariations = headVariations;
