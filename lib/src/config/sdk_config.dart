@@ -14,7 +14,7 @@ class Sdk {
 
   /// The SDK version, reported by [defaultUserAgent] and `sdkVersion`.
   // Keep in step with `version:` in pubspec.yaml.
-  static const String version = '4.0.1';
+  static const String version = '4.0.2';
 
   /// The default User-Agent sent with every request.
   static const String defaultUserAgent = 'webcommander/$version';
@@ -270,6 +270,10 @@ final class SdkConfig {
 
   /// Where the instance lives, from the credentials — see [AuthConfig.baseUrl].
   String get baseUrl => auth.baseUrl;
+
+  /// The Hykmah origin that issues the token, or `null` for the store, from the
+  /// credentials.
+  String? get authBaseUrl => auth.authBaseUrl;
 
   /// The instance's logical name, from the credentials.
   String get clientName => auth.clientName;
@@ -548,15 +552,21 @@ final class SdkConfig {
     'base_url',
     'client_id',
     'client_secret',
+    'client_name',
+  ];
+
+  // Required by the store token endpoint only; Hykmah needs neither.
+  static const List<String> _storeRequiredFields = <String>[
     'redirect_uri',
     'auth_string',
-    'client_name',
   ];
 
   static const Set<String> _authFieldNames = <String>{
     ..._mappingRequiredFields,
+    ..._storeRequiredFields,
     'grant_type',
     'token_cache_path',
+    'auth_base_url',
   };
 
   static const Set<String> _settingNames = <String>{
@@ -636,6 +646,7 @@ final class SdkConfig {
     var clientName = '';
     var grantType = AuthConfig.defaultGrantType;
     Object? tokenCachePath = useDefaultTokenCache;
+    String? authBaseUrl;
     if (carriesAuth) {
       if (suppliedAuth is! AuthConfig) {
         throw SdkConfigError('$where: auth must be an AuthConfig, got '
@@ -643,9 +654,12 @@ final class SdkConfig {
       }
       resolvedAuth = suppliedAuth;
     } else {
-      final absent = _mappingRequiredFields
-          .where((name) => !authValues.containsKey(name))
-          .toList();
+      final hykmahValue = authValues['auth_base_url'];
+      final usesHykmah = hykmahValue is String && hykmahValue.trim().isNotEmpty;
+      final absent = [
+        ..._mappingRequiredFields,
+        if (!usesHykmah) ..._storeRequiredFields,
+      ].where((name) => !authValues.containsKey(name)).toList();
       if (absent.isNotEmpty) {
         throw SdkConfigError(
             "credentials: missing required field(s): ${absent.join(', ')}");
@@ -653,8 +667,15 @@ final class SdkConfig {
       baseUrl = _requiredText(authValues, 'base_url', problems);
       clientId = _requiredText(authValues, 'client_id', problems);
       clientSecret = _requiredText(authValues, 'client_secret', problems);
-      redirectUri = _requiredText(authValues, 'redirect_uri', problems);
-      authString = _requiredText(authValues, 'auth_string', problems);
+      if (authValues.containsKey('redirect_uri')) {
+        redirectUri = _requiredText(authValues, 'redirect_uri', problems);
+      }
+      if (authValues.containsKey('auth_string')) {
+        authString = _requiredText(authValues, 'auth_string', problems);
+      }
+      if (authValues.containsKey('auth_base_url')) {
+        authBaseUrl = _textOrNull(authValues, 'auth_base_url', problems);
+      }
       clientName = _requiredText(authValues, 'client_name', problems);
       if (authValues.containsKey('grant_type')) {
         grantType = _requiredText(authValues, 'grant_type', problems);
@@ -744,6 +765,7 @@ final class SdkConfig {
       clientName: clientName,
       grantType: grantType,
       tokenCachePath: tokenCachePath,
+      authBaseUrl: authBaseUrl,
     );
 
     return SdkConfig(resolvedAuth).withOverrides(

@@ -13,12 +13,14 @@ final class AuthConfig {
     required String baseUrl,
     required this.clientId,
     required this.clientSecret,
-    required this.redirectUri,
-    required this.authString,
+    this.redirectUri = '',
+    this.authString = '',
     required this.clientName,
     this.grantType = defaultGrantType,
     Object? tokenCachePath = useDefaultTokenCache,
-  }) : baseUrl = _normaliseBaseUrl(baseUrl) {
+    String? authBaseUrl,
+  })  : baseUrl = _normaliseBaseUrl(baseUrl),
+        authBaseUrl = _normaliseAuthBaseUrl(authBaseUrl) {
     // Validated first: resolving creates the cache directory, which a bad config must not leave.
     _validate(tokenCachePath);
     this.tokenCachePath = _resolveTokenCachePath(tokenCachePath);
@@ -37,10 +39,12 @@ final class AuthConfig {
   /// The OAuth client secret; redacted by [toString].
   final String clientSecret;
 
-  /// The registered redirect URI.
+  /// The registered redirect URI; required by the store token endpoint, unused
+  /// when [authBaseUrl] is set.
   final String redirectUri;
 
-  /// The base64 admin credential; redacted by [toString].
+  /// The base64 admin credential, redacted by [toString]; required by the store
+  /// token endpoint, unused when [authBaseUrl] is set.
   final String authString;
 
   /// Logical name distinguishing this instance, and how it is selected by name.
@@ -53,6 +57,13 @@ final class AuthConfig {
   /// own path, or `null` when the token is kept in memory.
   late final String? tokenCachePath;
 
+  /// The Hykmah origin that issues the token, or `null` when the store at
+  /// [baseUrl] does.
+  final String? authBaseUrl;
+
+  /// Whether the token comes from Hykmah rather than from the store itself.
+  bool get usesHykmah => authBaseUrl != null;
+
   /// Every field, in declaration order, secrets replaced and URLs reduced to their origin.
   @override
   String toString() => "AuthConfig(baseUrl='${_origin(baseUrl)}'"
@@ -62,7 +73,8 @@ final class AuthConfig {
       ", authString='${Redaction.redacted}'"
       ", clientName='${_shown('clientName', clientName)}'"
       ", grantType='${_shown('grantType', grantType)}'"
-      ", tokenCachePath=${tokenCachePath == null ? 'null' : "'<configured>'"})";
+      ", tokenCachePath=${tokenCachePath == null ? 'null' : "'<configured>'"}"
+      ", authBaseUrl=${authBaseUrl == null ? 'null' : "'${_origin(authBaseUrl!)}'"})";
 
   static String _shown(String name, String value) =>
       '${Redaction.redactForDisplay(name, value)}';
@@ -87,6 +99,7 @@ final class AuthConfig {
     String? clientName,
     String? grantType,
     Object? tokenCachePath = SdkConfig.noOverride,
+    Object? authBaseUrl = SdkConfig.noOverride,
   }) =>
       AuthConfig(
         baseUrl: baseUrl ?? this.baseUrl,
@@ -99,6 +112,9 @@ final class AuthConfig {
         tokenCachePath: identical(tokenCachePath, SdkConfig.noOverride)
             ? this.tokenCachePath
             : tokenCachePath,
+        authBaseUrl: identical(authBaseUrl, SdkConfig.noOverride)
+            ? this.authBaseUrl
+            : authBaseUrl as String?,
       );
 
   /// The credentials that must be present, in declaration order.
@@ -108,6 +124,14 @@ final class AuthConfig {
     'clientSecret',
     'redirectUri',
     'authString',
+  ];
+
+  /// The credentials that must be present when [authBaseUrl] is set: Hykmah
+  /// issues the token from the client alone.
+  static const List<String> hykmahRequiredFields = <String>[
+    'baseUrl',
+    'clientId',
+    'clientSecret',
   ];
 
   void _validate(Object? requested) {
@@ -120,12 +144,16 @@ final class AuthConfig {
       'redirectUri': redirectUri,
       'authString': authString,
     };
+    final required = usesHykmah ? hykmahRequiredFields : requiredFields;
     final missing =
-        requiredFields.where((name) => _isBlank(supplied[name]!)).toList();
+        required.where((name) => _isBlank(supplied[name]!)).toList();
     if (missing.isNotEmpty) {
       problems.add('missing required values: ${missing.join(', ')}');
     }
     if (!_isBlank(baseUrl)) problems.addAll(_baseUrlProblems(baseUrl));
+    if (usesHykmah) {
+      problems.addAll(_baseUrlProblems(authBaseUrl!, 'authBaseUrl'));
+    }
     if (_isBlank(clientName)) problems.add('clientName: must not be blank');
     if (_isBlank(grantType)) problems.add('grantType: must not be blank');
 
@@ -157,24 +185,33 @@ final class AuthConfig {
     return trimmed;
   }
 
-  static List<String> _baseUrlProblems(String baseUrl) {
+  /// Trim the Hykmah origin; blank means not set, so an empty `.env` entry
+  /// keeps the store flow.
+  static String? _normaliseAuthBaseUrl(String? raw) {
+    if (raw == null) return null;
+    final normalised = _normaliseBaseUrl(raw);
+    return normalised.isEmpty ? null : normalised;
+  }
+
+  static List<String> _baseUrlProblems(String baseUrl,
+      [String name = 'baseUrl']) {
     final problems = <String>[];
     final parsed = Uri.tryParse(baseUrl);
     // hasScheme, not isAbsolute, which is false for any URI with a fragment.
     if (parsed == null || !parsed.hasScheme) {
-      problems.add('baseUrl: not a URL');
+      problems.add('$name: not a URL');
       return problems;
     }
     final scheme = parsed.scheme.toLowerCase();
     if ((scheme != 'http' && scheme != 'https') || parsed.host.isEmpty) {
-      problems.add('baseUrl: must start with http:// or https:// and include a '
+      problems.add('$name: must start with http:// or https:// and include a '
           'host; this one names scheme "$scheme"'
           '${parsed.host.isEmpty ? ' and no host' : ''}');
       return problems;
     }
     if (parsed.userInfo.isNotEmpty) {
       problems.add(
-          'baseUrl: host ${parsed.host} carries embedded credentials, which would '
+          '$name: host ${parsed.host} carries embedded credentials, which would '
           'replace the bearer token; strip the userinfo');
     }
     if (parsed.hasQuery || baseUrl.contains('#')) {
@@ -184,7 +221,7 @@ final class AuthConfig {
               : 'a query string')
           : 'a fragment';
       problems.add(
-          'baseUrl: must be a scheme, host and optional base path, and the one '
+          '$name: must be a scheme, host and optional base path, and the one '
           'configured for host ${parsed.host} carries $carries');
     }
     return problems;

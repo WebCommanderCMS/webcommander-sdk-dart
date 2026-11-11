@@ -12,7 +12,10 @@ class TokenProvider {
   /// Build a provider; [tokenPath] overrides the default endpoint path.
   TokenProvider(this._config, this._transport, this._tokenStore,
       {String? tokenPath, void Function(String message)? onCacheDegraded})
-      : _tokenPath = tokenPath ?? buildTokenPath(_config.apiVersion),
+      : _tokenPath = tokenPath ??
+            (_config.auth.usesHykmah
+                ? hykmahTokenPath
+                : buildTokenPath(_config.apiVersion)),
         _onCacheDegraded = onCacheDegraded;
 
   static const String _refreshGrantType = 'refresh_token';
@@ -28,8 +31,11 @@ class TokenProvider {
       'the access token was obtained but not cached: ${refused.message}. Every '
       'call will buy a fresh token until the cache works again');
 
-  /// The absolute token endpoint URL.
-  String get tokenUrl => _config.baseUrl + _tokenPath;
+  /// The absolute token endpoint URL: the Hykmah origin when `authBaseUrl` is
+  /// set, otherwise the store's base URL, joined with the token path.
+  String get tokenUrl =>
+      (_config.auth.usesHykmah ? _config.authBaseUrl! : _config.baseUrl) +
+      _tokenPath;
 
   /// A usable access token, fetching one only if needed. A token store that
   /// cannot be read fails this call; one that cannot be written does not.
@@ -77,18 +83,18 @@ class TokenProvider {
   }
 
   Future<TokenRecord> _requestTokenWithCredentials() async {
-    final response = await _transport.sendHttpRequest(
-      TransportRequest('POST', tokenUrl,
-          jsonBody: _credentialsPayload(),
-          headers: _tokenHeaders(),
-          endpointTemplate: tokenPathTemplate),
-    );
+    final usesHykmah = _config.auth.usesHykmah;
+    final response = await _sendTokenRequest(<String, Object?>{
+      'grant_type': _config.auth.grantType,
+      if (!usesHykmah) 'auth_string': _config.auth.authString,
+    });
     if (!response.succeeded) {
       final messages = response.getErrorMessages();
       // Counts what the endpoint said, never quotes it: it echoes credential material.
       final error = SdkAuthError(
         'token request failed with ${response.statusCode} '
-        '(${messages.length} message(s) from the endpoint)',
+        '(${messages.length} message(s) from the endpoint)'
+        '${usesHykmah ? "; check clientId, clientSecret, grantType and authBaseUrl" : ""}',
         statusCode: response.statusCode,
         errorType: response.errorType,
         rawResponse: Redaction.redactValue(response.map),
@@ -106,20 +112,11 @@ class TokenProvider {
   /// The cheap grant; an expected failure falls back to full credentials.
   Future<TokenRecord?> _requestTokenWithRefreshGrant(
       String refreshToken) async {
-    final payload = <String, Object?>{
-      'grant_type': _refreshGrantType,
-      'refresh_token': refreshToken,
-      'redirect_uri': _config.auth.redirectUri,
-      'client_id': _config.auth.clientId,
-      'client_secret': _config.auth.clientSecret,
-    };
     try {
-      final response = await _transport.sendHttpRequest(
-        TransportRequest('POST', tokenUrl,
-            jsonBody: payload,
-            headers: _tokenHeaders(),
-            endpointTemplate: tokenPathTemplate),
-      );
+      final response = await _sendTokenRequest(<String, Object?>{
+        'grant_type': _refreshGrantType,
+        'refresh_token': refreshToken,
+      });
       return response.succeeded
           ? _buildTokenRecord(response, refreshToken)
           : null;
@@ -132,16 +129,37 @@ class TokenProvider {
   static bool _isCallerFault(SdkError error) =>
       error is SdkUsageError || error is SdkConfigError;
 
-  Map<String, Object?> _credentialsPayload() => <String, Object?>{
-        'grant_type': _config.auth.grantType,
-        'auth_string': _config.auth.authString,
-        'redirect_uri': _config.auth.redirectUri,
-        'client_id': _config.auth.clientId,
-        'client_secret': _config.auth.clientSecret,
-      };
+  /// POST one grant: a form to Hykmah, which refuses JSON, or JSON with the
+  /// redirect URI to the store.
+  Future<ApiResponse> _sendTokenRequest(Map<String, Object?> grant) {
+    final client = <String, Object?>{
+      'client_id': _config.auth.clientId,
+      'client_secret': _config.auth.clientSecret,
+    };
+    if (_config.auth.usesHykmah) {
+      return _transport.sendHttpRequest(
+        TransportRequest('POST', tokenUrl,
+            formData: <String, Object?>{...grant, ...client},
+            headers: _tokenHeaders(),
+            endpointTemplate: hykmahTokenPath),
+      );
+    }
+    return _transport.sendHttpRequest(
+      TransportRequest('POST', tokenUrl,
+          jsonBody: <String, Object?>{
+            ...grant,
+            'redirect_uri': _config.auth.redirectUri,
+            ...client,
+          },
+          headers: <String, String>{
+            ..._tokenHeaders(),
+            'Content-Type': 'application/json',
+          },
+          endpointTemplate: tokenPathTemplate),
+    );
+  }
 
   Map<String, String> _tokenHeaders() => <String, String>{
-        'Content-Type': 'application/json',
         'Accept': 'application/json',
         'User-Agent': _config.userAgent,
       };
@@ -191,6 +209,9 @@ class TokenProvider {
 /// The token endpoint path with `{api_version}` still in it — the template
 /// [buildTokenPath] substitutes into.
 const String tokenPathTemplate = '/api/{api_version}/oauth2/token';
+
+/// The token path on the Hykmah origin set as `authBaseUrl`.
+const String hykmahTokenPath = '/api/v1/oauth/token';
 
 /// The token endpoint path for an API version.
 String buildTokenPath(String apiVersion) =>

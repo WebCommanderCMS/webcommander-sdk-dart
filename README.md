@@ -22,7 +22,7 @@ or add it to `pubspec.yaml` and run `dart pub get`:
 
 ```yaml
 dependencies:
-  webcommander: ^4.0.1
+  webcommander: ^4.0.2
 ```
 
 Everything is exported from one library:
@@ -71,6 +71,25 @@ Future<void> main() async {
   `SdkUsageError`; build a new client instead.
 - The SDK never reads credentials from the environment or from `.env`. The example reads them in
   your code.
+
+### Hykmah sign-in
+
+A store whose API client was issued through Hykmah gets its token from Hykmah instead of from
+the store. Pass the Hykmah address as `authBaseUrl`; `redirectUri` and `authString` are not
+needed:
+
+```dart
+final client = WebCommanderClient(SdkConfig(AuthConfig(
+  clientName: 'default',
+  baseUrl: Platform.environment['WC_BASE_URL']!,
+  clientId: Platform.environment['WC_CLIENT_ID']!,
+  clientSecret: Platform.environment['WC_CLIENT_SECRET']!,
+  authBaseUrl: Platform.environment['WC_AUTH_BASE_URL']!,
+)));
+```
+
+Only the token request goes to `authBaseUrl`. Every API call still goes to `baseUrl`. Leave
+`authBaseUrl` unset to get the token from the store with `redirectUri` and `authString`.
 
 ## Configuration
 

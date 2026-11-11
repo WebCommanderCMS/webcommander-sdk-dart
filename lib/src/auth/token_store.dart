@@ -13,15 +13,17 @@ const String defaultTokenCacheFilename = 'wc_dart_token.json';
 String buildCredentialsNamespace(String? baseUrl, String? clientId,
     [String? clientSecret = '',
     String? authString = '',
-    String? grantType = '']) {
+    String? grantType = '',
+    String? authBaseUrl = '']) {
   final material = StringBuffer();
   for (final value in <String?>[
-    'v3',
+    'v4',
     baseUrl,
     clientId,
     clientSecret,
     authString,
-    grantType
+    grantType,
+    authBaseUrl
   ]) {
     final text = value ?? '';
     material

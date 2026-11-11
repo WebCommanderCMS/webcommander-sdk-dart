@@ -11,7 +11,7 @@ TokenStore buildDefaultTokenStore(SdkConfig config) {
   return FileTokenStore(
       path,
       buildCredentialsNamespace(auth.baseUrl, auth.clientId, auth.clientSecret,
-          auth.authString, auth.grantType),
+          auth.authString, auth.grantType, auth.authBaseUrl),
       FileTokenStore.defaultLockWaitSeconds,
       config.maxTokenCacheBytes);
 }
