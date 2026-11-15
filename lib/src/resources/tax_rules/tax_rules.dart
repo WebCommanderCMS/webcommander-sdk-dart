@@ -21,12 +21,6 @@ class TaxRules {
           raiseOnError: raiseOnError,
           responseFormat: responseFormat);
 
-  /// Ask whether the collection is reachable — `HEAD /admin/tax_rules`.
-  Future<ApiResponse> headTaxRules(
-          {bool? raiseOnError, String? responseFormat}) =>
-      _headTaxRules(_client,
-          raiseOnError: raiseOnError, responseFormat: responseFormat);
-
   /// Create a tax rule — `POST /admin/tax_rules`.
   Future<ApiResponse> createTaxRule(Object payload,
           {bool? raiseOnError, String? responseFormat}) =>
@@ -37,12 +31,6 @@ class TaxRules {
   Future<ApiResponse> getTaxRule(Object taxRuleId,
           {bool? raiseOnError, String? responseFormat}) =>
       _getTaxRule(_client, taxRuleId,
-          raiseOnError: raiseOnError, responseFormat: responseFormat);
-
-  /// Ask whether one tax rule is there — `HEAD /admin/tax_rules/{tax_rule_id}`.
-  Future<ApiResponse> headTaxRule(Object taxRuleId,
-          {bool? raiseOnError, String? responseFormat}) =>
-      _headTaxRule(_client, taxRuleId,
           raiseOnError: raiseOnError, responseFormat: responseFormat);
 
   /// Update one tax rule — `PUT /admin/tax_rules/{tax_rule_id}`.
@@ -71,12 +59,6 @@ Future<ApiResponse> listTaxRules(
         responseFormat: responseFormat,
         dtoDecoder: TaxRulePage.fromMap);
 
-/// Ask whether the collection is reachable — `HEAD /admin/tax_rules`.
-Future<ApiResponse> headTaxRules(WebCommanderClient client,
-        {bool? raiseOnError, String? responseFormat}) =>
-    client.sendApiRequest('HEAD', TaxRuleUrls.taxRules,
-        raiseOnError: raiseOnError, responseFormat: responseFormat);
-
 /// Create a tax rule — `POST /admin/tax_rules`.
 Future<ApiResponse> createTaxRule(WebCommanderClient client, Object payload,
         {bool? raiseOnError, String? responseFormat}) =>
@@ -94,14 +76,6 @@ Future<ApiResponse> getTaxRule(WebCommanderClient client, Object taxRuleId,
         raiseOnError: raiseOnError,
         responseFormat: responseFormat,
         dtoDecoder: TaxRule.fromMap);
-
-/// Ask whether one tax rule is there — `HEAD /admin/tax_rules/{tax_rule_id}`.
-Future<ApiResponse> headTaxRule(WebCommanderClient client, Object taxRuleId,
-        {bool? raiseOnError, String? responseFormat}) =>
-    client.sendApiRequest('HEAD', TaxRuleUrls.taxRule,
-        pathParams: {'tax_rule_id': taxRuleId},
-        raiseOnError: raiseOnError,
-        responseFormat: responseFormat);
 
 /// Update one tax rule — `PUT /admin/tax_rules/{tax_rule_id}`.
 Future<ApiResponse> updateTaxRule(
@@ -123,9 +97,7 @@ Future<ApiResponse> deleteTaxRule(WebCommanderClient client, Object taxRuleId,
         responseFormat: responseFormat);
 
 final _listTaxRules = listTaxRules;
-final _headTaxRules = headTaxRules;
 final _createTaxRule = createTaxRule;
 final _getTaxRule = getTaxRule;
-final _headTaxRule = headTaxRule;
 final _updateTaxRule = updateTaxRule;
 final _deleteTaxRule = deleteTaxRule;

@@ -91,7 +91,7 @@ class OrderCustomer extends Dto {
   /// `customer_id` — the public id a `{customer_id}` slot takes.
   final int? customerId;
 
-  /// `internal_id` — what the listing's `customerId` filter takes.
+  /// `internal_id` — for reference only.
   final int? internalId;
 
   final String? email;
@@ -778,12 +778,12 @@ class Order extends Dto {
     );
   }
 
-  /// `order_id` — what every order path but two takes; equal to `order_no`.
+  /// `order_id` — what every order path takes; equal to `order_no`.
   final int? orderId;
 
   final int? orderNo;
 
-  /// `internal_id` — what `custom_fields` and `send-invoice` take.
+  /// `internal_id` — for reference only.
   final int? internalId;
 
   /// `uuid` — a UUID string the store assigns; not writable.
@@ -1363,7 +1363,7 @@ class OrderCommentList extends Dto {
 /// An order's custom field values; a `delivery` order adds `delivery_cost`.
 class OrderCustomFieldValues extends Dto {
   const OrderCustomFieldValues(
-      {this.orderId, this.customFields, this.deliveryCost});
+      {this.orderId, this.internalId, this.customFields, this.deliveryCost});
 
   /// Reads the custom fields body.
   static OrderCustomFieldValues? fromMap(Object? body) {
@@ -1371,13 +1371,15 @@ class OrderCustomFieldValues extends Dto {
     if (source == null) return null;
     return OrderCustomFieldValues(
       orderId: readInteger(source['order_id']),
+      internalId: readInteger(source['internal_id']),
       customFields: readList<Object>(source['custom_fields'], readAny),
       deliveryCost: readDecimal(source['delivery_cost']),
     );
   }
 
-  /// `order_id` — echoes the `internal_id` asked for.
   final int? orderId;
+
+  final int? internalId;
 
   final List<Object?>? customFields;
 
@@ -1386,6 +1388,7 @@ class OrderCustomFieldValues extends Dto {
   @override
   Map<String, Object?> get fields => <String, Object?>{
         'order_id': orderId,
+        'internal_id': internalId,
         'custom_fields': customFields,
         'delivery_cost': deliveryCost,
       };
@@ -1637,8 +1640,7 @@ class OrderRefundRecordLine extends Dto {
       };
 }
 
-/// One refund an order holds. `order_id` is the order's internal id. A payment
-/// refund fills `record_only` to `lines`; an order refund leaves them `null`
+/// One refund an order holds. A payment refund fills `record_only` to `lines`; an order refund leaves them `null`
 /// and `lines` empty. `gateway_charge_id`, `gateway_refund_id` and
 /// `failure_cause` were `null` on every refund read, so they are not typed.
 class OrderRefundRecord extends Dto {
@@ -1764,11 +1766,11 @@ class OrderRefundRecord extends Dto {
       };
 }
 
-/// One page of an order's refunds, newest first. `order_id` is the order's
-/// internal id and `order_no` the `{order_id}` the path took.
+/// One page of an order's refunds, newest first; `order_no` equals `order_id`.
 class OrderRefundPage extends Dto {
   const OrderRefundPage({
     this.orderId,
+    this.internalId,
     this.orderNo,
     this.refunds,
     this.pagination,
@@ -1780,6 +1782,7 @@ class OrderRefundPage extends Dto {
     if (source == null) return null;
     return OrderRefundPage(
       orderId: readInteger(source['order_id']),
+      internalId: readInteger(source['internal_id']),
       orderNo: readInteger(source['order_no']),
       refunds: readList<OrderRefundRecord>(
           source['refunds'], OrderRefundRecord.fromMap),
@@ -1788,6 +1791,8 @@ class OrderRefundPage extends Dto {
   }
 
   final int? orderId;
+
+  final int? internalId;
 
   final int? orderNo;
 
@@ -1798,20 +1803,22 @@ class OrderRefundPage extends Dto {
   @override
   Map<String, Object?> get fields => <String, Object?>{
         'order_id': orderId,
+        'internal_id': internalId,
         'order_no': orderNo,
         'refunds': refunds,
         'pagination': pagination,
       };
 }
 
-/// What a payment refund answers; a replay drops four flags and adds
-/// `idempotent_replay`.
+/// What a payment refund answers; `order_no` equals `order_id`. A replay drops
+/// four flags and adds `idempotent_replay`.
 class PaymentRefund extends Dto {
   const PaymentRefund({
     this.status,
     this.refundId,
     this.paymentId,
     this.orderId,
+    this.internalId,
     this.orderNo,
     this.currency,
     this.amount,
@@ -1842,6 +1849,7 @@ class PaymentRefund extends Dto {
       refundId: readInteger(source['refund_id']),
       paymentId: readInteger(source['payment_id']),
       orderId: readInteger(source['order_id']),
+      internalId: readInteger(source['internal_id']),
       orderNo: readInteger(source['order_no']),
       currency: readText(source['currency']),
       amount: readDecimal(source['amount']),
@@ -1870,10 +1878,10 @@ class PaymentRefund extends Dto {
 
   final int? paymentId;
 
-  /// `order_id` — the order's `internal_id`, not its `order_id`.
   final int? orderId;
 
-  /// `order_no` — the order's `order_id`.
+  final int? internalId;
+
   final int? orderNo;
 
   final String? currency;
@@ -1918,6 +1926,7 @@ class PaymentRefund extends Dto {
         'refund_id': refundId,
         'payment_id': paymentId,
         'order_id': orderId,
+        'internal_id': internalId,
         'order_no': orderNo,
         'currency': currency,
         'amount': amount,

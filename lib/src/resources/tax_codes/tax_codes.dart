@@ -21,12 +21,6 @@ class TaxCodes {
           raiseOnError: raiseOnError,
           responseFormat: responseFormat);
 
-  /// Ask whether the collection is reachable — `HEAD /admin/tax_codes`.
-  Future<ApiResponse> headTaxCodes(
-          {bool? raiseOnError, String? responseFormat}) =>
-      _headTaxCodes(_client,
-          raiseOnError: raiseOnError, responseFormat: responseFormat);
-
   /// Create a tax code — `POST /admin/tax_codes`.
   Future<ApiResponse> createTaxCode(Object payload,
           {bool? raiseOnError, String? responseFormat}) =>
@@ -37,12 +31,6 @@ class TaxCodes {
   Future<ApiResponse> getTaxCode(Object taxCodeId,
           {bool? raiseOnError, String? responseFormat}) =>
       _getTaxCode(_client, taxCodeId,
-          raiseOnError: raiseOnError, responseFormat: responseFormat);
-
-  /// Ask whether one tax code is there — `HEAD /admin/tax_codes/{tax_code_id}`.
-  Future<ApiResponse> headTaxCode(Object taxCodeId,
-          {bool? raiseOnError, String? responseFormat}) =>
-      _headTaxCode(_client, taxCodeId,
           raiseOnError: raiseOnError, responseFormat: responseFormat);
 
   /// Update one tax code — `PUT /admin/tax_codes/{tax_code_id}`.
@@ -71,12 +59,6 @@ Future<ApiResponse> listTaxCodes(
         responseFormat: responseFormat,
         dtoDecoder: TaxCodePage.fromMap);
 
-/// Ask whether the collection is reachable — `HEAD /admin/tax_codes`.
-Future<ApiResponse> headTaxCodes(WebCommanderClient client,
-        {bool? raiseOnError, String? responseFormat}) =>
-    client.sendApiRequest('HEAD', TaxCodeUrls.taxCodes,
-        raiseOnError: raiseOnError, responseFormat: responseFormat);
-
 /// Create a tax code — `POST /admin/tax_codes`.
 Future<ApiResponse> createTaxCode(WebCommanderClient client, Object payload,
         {bool? raiseOnError, String? responseFormat}) =>
@@ -94,14 +76,6 @@ Future<ApiResponse> getTaxCode(WebCommanderClient client, Object taxCodeId,
         raiseOnError: raiseOnError,
         responseFormat: responseFormat,
         dtoDecoder: TaxCode.fromMap);
-
-/// Ask whether one tax code is there — `HEAD /admin/tax_codes/{tax_code_id}`.
-Future<ApiResponse> headTaxCode(WebCommanderClient client, Object taxCodeId,
-        {bool? raiseOnError, String? responseFormat}) =>
-    client.sendApiRequest('HEAD', TaxCodeUrls.taxCode,
-        pathParams: {'tax_code_id': taxCodeId},
-        raiseOnError: raiseOnError,
-        responseFormat: responseFormat);
 
 /// Update one tax code — `PUT /admin/tax_codes/{tax_code_id}`.
 Future<ApiResponse> updateTaxCode(
@@ -123,9 +97,7 @@ Future<ApiResponse> deleteTaxCode(WebCommanderClient client, Object taxCodeId,
         responseFormat: responseFormat);
 
 final _listTaxCodes = listTaxCodes;
-final _headTaxCodes = headTaxCodes;
 final _createTaxCode = createTaxCode;
 final _getTaxCode = getTaxCode;
-final _headTaxCode = headTaxCode;
 final _updateTaxCode = updateTaxCode;
 final _deleteTaxCode = deleteTaxCode;

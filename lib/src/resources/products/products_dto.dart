@@ -2918,8 +2918,8 @@ class ProductReviewer extends Dto {
       };
 }
 
-/// One customer an audience names: `id` is the customer's `customer_id`,
-/// `internal_id` its `internal_id`.
+/// One customer an audience names: `id` is the customer's `customer_id`;
+/// `internal_id` is for reference.
 class ProductSelectedCustomer extends Dto {
   const ProductSelectedCustomer({this.id, this.internalId, this.name});
 

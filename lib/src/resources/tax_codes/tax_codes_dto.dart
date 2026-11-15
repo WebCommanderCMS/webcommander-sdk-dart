@@ -42,8 +42,9 @@ class TaxCode extends Dto {
 
   final double? rate;
 
-  /// `resolver_type` — stored unchecked by the create, and back to `flat` when
-  /// an update omits it.
+  /// `resolver_type` — `flat` is the only value the create accepts (any other is
+  /// `400 tax.code.resolver.type.invalid`), and an update that omits it sets it
+  /// back to `flat`.
   final String? resolverType;
 
   /// `priority` — back to `0` when an update omits it.

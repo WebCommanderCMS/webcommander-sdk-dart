@@ -21,12 +21,6 @@ class ShippingClasses {
           raiseOnError: raiseOnError,
           responseFormat: responseFormat);
 
-  /// Ask whether the collection answers — `HEAD /admin/shipping_classes`.
-  Future<ApiResponse> headShippingClasses(
-          {bool? raiseOnError, String? responseFormat}) =>
-      _headShippingClasses(_client,
-          raiseOnError: raiseOnError, responseFormat: responseFormat);
-
   /// How many classes the store holds — `GET /admin/shipping_classes/count`.
   Future<ApiResponse> countShippingClasses({
     Map<String, Object?>? queryParams,
@@ -55,12 +49,6 @@ class ShippingClasses {
           queryParams: queryParams,
           raiseOnError: raiseOnError,
           responseFormat: responseFormat);
-
-  /// Ask whether a class's path answers — `HEAD .../{shipping_class_id}`.
-  Future<ApiResponse> headShippingClass(Object shippingClassId,
-          {bool? raiseOnError, String? responseFormat}) =>
-      _headShippingClass(_client, shippingClassId,
-          raiseOnError: raiseOnError, responseFormat: responseFormat);
 
   /// Replace one class — `PUT /admin/shipping_classes/{shipping_class_id}`.
   Future<ApiResponse> updateShippingClass(
@@ -94,12 +82,6 @@ Future<ApiResponse> listShippingClasses(
         raiseOnError: raiseOnError,
         responseFormat: responseFormat,
         dtoDecoder: ShippingClassPage.fromMap);
-
-/// Ask whether the collection answers — `HEAD /admin/shipping_classes`; `200`, no body.
-Future<ApiResponse> headShippingClasses(WebCommanderClient client,
-        {bool? raiseOnError, String? responseFormat}) =>
-    client.sendApiRequest('HEAD', ShippingClassUrls.shippingClasses,
-        raiseOnError: raiseOnError, responseFormat: responseFormat);
 
 /// How many classes the store holds — `GET /admin/shipping_classes/count`.
 Future<ApiResponse> countShippingClasses(
@@ -139,15 +121,6 @@ Future<ApiResponse> getShippingClass(
         responseFormat: responseFormat,
         dtoDecoder: ShippingClass.fromMap);
 
-/// Ask whether a class's path answers — `HEAD .../{shipping_class_id}`.
-Future<ApiResponse> headShippingClass(
-        WebCommanderClient client, Object shippingClassId,
-        {bool? raiseOnError, String? responseFormat}) =>
-    client.sendApiRequest('HEAD', ShippingClassUrls.shippingClass,
-        pathParams: {'shipping_class_id': shippingClassId},
-        raiseOnError: raiseOnError,
-        responseFormat: responseFormat);
-
 /// Replace one class — `PUT /admin/shipping_classes/{shipping_class_id}`.
 Future<ApiResponse> updateShippingClass(
         WebCommanderClient client, Object shippingClassId, Object payload,
@@ -179,11 +152,9 @@ Future<ApiResponse> setShippingClassDefault(
         dtoDecoder: ShippingClass.fromMap);
 
 final _listShippingClasses = listShippingClasses;
-final _headShippingClasses = headShippingClasses;
 final _countShippingClasses = countShippingClasses;
 final _createShippingClass = createShippingClass;
 final _getShippingClass = getShippingClass;
-final _headShippingClass = headShippingClass;
 final _updateShippingClass = updateShippingClass;
 final _deleteShippingClass = deleteShippingClass;
 final _setShippingClassDefault = setShippingClassDefault;

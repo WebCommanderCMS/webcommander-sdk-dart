@@ -439,7 +439,7 @@ class Cart extends Dto {
     );
   }
 
-  /// `customer_id` — the customer's `internal_id` on the add's answer, `null`
+  /// `customer_id` — the customer's `customer_id` on the add's answer, `null`
   /// on every read and line update.
   final int? customerId;
 
@@ -546,7 +546,7 @@ class CartAddressInput extends Dto {
 }
 
 /// The add's body, no envelope; `customer_id` takes the customer's
-/// `internal_id`.
+/// `customer_id`.
 class CartItemInput extends Dto {
   const CartItemInput({
     this.productId,

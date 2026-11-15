@@ -21,12 +21,6 @@ class InventoryLocations {
           raiseOnError: raiseOnError,
           responseFormat: responseFormat);
 
-  /// Ask whether the collection is reachable — `HEAD /admin/inventory_locations`.
-  Future<ApiResponse> headInventoryLocations(
-          {bool? raiseOnError, String? responseFormat}) =>
-      _headInventoryLocations(_client,
-          raiseOnError: raiseOnError, responseFormat: responseFormat);
-
   /// Create a location — `POST /admin/inventory_locations`.
   Future<ApiResponse> createInventoryLocation(Object payload,
           {bool? raiseOnError, String? responseFormat}) =>
@@ -38,13 +32,6 @@ class InventoryLocations {
   Future<ApiResponse> getInventoryLocation(Object inventoryLocationId,
           {bool? raiseOnError, String? responseFormat}) =>
       _getInventoryLocation(_client, inventoryLocationId,
-          raiseOnError: raiseOnError, responseFormat: responseFormat);
-
-  /// Ask whether one location is there —
-  /// `HEAD /admin/inventory_locations/{inventory_location_id}`.
-  Future<ApiResponse> headInventoryLocation(Object inventoryLocationId,
-          {bool? raiseOnError, String? responseFormat}) =>
-      _headInventoryLocation(_client, inventoryLocationId,
           raiseOnError: raiseOnError, responseFormat: responseFormat);
 
   /// Replace one location —
@@ -112,12 +99,6 @@ Future<ApiResponse> listInventoryLocations(
         responseFormat: responseFormat,
         dtoDecoder: InventoryLocationPage.fromMap);
 
-/// Ask whether the collection is reachable — `HEAD /admin/inventory_locations`.
-Future<ApiResponse> headInventoryLocations(WebCommanderClient client,
-        {bool? raiseOnError, String? responseFormat}) =>
-    client.sendApiRequest('HEAD', InventoryLocationUrls.inventoryLocations,
-        raiseOnError: raiseOnError, responseFormat: responseFormat);
-
 /// Create a location — `POST /admin/inventory_locations`.
 Future<ApiResponse> createInventoryLocation(
         WebCommanderClient client, Object payload,
@@ -138,16 +119,6 @@ Future<ApiResponse> getInventoryLocation(
         raiseOnError: raiseOnError,
         responseFormat: responseFormat,
         dtoDecoder: InventoryLocationRecord.fromMap);
-
-/// Ask whether one location is there —
-/// `HEAD /admin/inventory_locations/{inventory_location_id}`.
-Future<ApiResponse> headInventoryLocation(
-        WebCommanderClient client, Object inventoryLocationId,
-        {bool? raiseOnError, String? responseFormat}) =>
-    client.sendApiRequest('HEAD', InventoryLocationUrls.inventoryLocation,
-        pathParams: {'inventory_location_id': inventoryLocationId},
-        raiseOnError: raiseOnError,
-        responseFormat: responseFormat);
 
 /// Replace one location —
 /// `PUT /admin/inventory_locations/{inventory_location_id}`.
@@ -224,10 +195,8 @@ Future<ApiResponse> updateInventoryLocationStatus(
         dtoDecoder: InventoryLocationRecord.fromMap);
 
 final _listInventoryLocations = listInventoryLocations;
-final _headInventoryLocations = headInventoryLocations;
 final _createInventoryLocation = createInventoryLocation;
 final _getInventoryLocation = getInventoryLocation;
-final _headInventoryLocation = headInventoryLocation;
 final _updateInventoryLocation = updateInventoryLocation;
 final _patchInventoryLocation = patchInventoryLocation;
 final _deleteInventoryLocation = deleteInventoryLocation;

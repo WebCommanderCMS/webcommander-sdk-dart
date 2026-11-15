@@ -13,6 +13,7 @@ import '../redaction.dart';
 import '../resources/aliases/aliases.dart';
 import '../resources/blog_categories/blog_categories.dart';
 import '../resources/blogs/blogs.dart';
+import '../resources/carts/admin_carts.dart';
 import '../resources/carts/carts.dart';
 import '../resources/categories/categories.dart';
 import '../resources/cities/cities.dart';
@@ -32,7 +33,6 @@ import '../resources/gift_cards/gift_cards.dart';
 import '../resources/inventory_locations/inventory_locations.dart';
 import '../resources/order_custom_fields/order_custom_fields.dart';
 import '../resources/order_flags/order_flags.dart';
-import '../resources/order_previews/order_previews.dart';
 import '../resources/orders/orders.dart';
 import '../resources/pages/pages.dart';
 import '../resources/payment_gateways/payment_gateways.dart';
@@ -146,6 +146,11 @@ class WebCommanderClient {
 
   /// The logical name of this instance.
   String get name => _config.clientName;
+
+  AdminCarts? _adminCarts;
+
+  /// The admin cart and checkout endpoints, bound to this client.
+  AdminCarts get adminCarts => _adminCarts ??= AdminCarts(this);
 
   AdminCustomers? _adminCustomers;
 
@@ -284,11 +289,6 @@ class WebCommanderClient {
 
   /// The country endpoints, bound to this client.
   Countries get countries => _countries ??= Countries(this);
-
-  OrderPreviews? _orderPreviews;
-
-  /// The order preview endpoints, bound to this client.
-  OrderPreviews get orderPreviews => _orderPreviews ??= OrderPreviews(this);
 
   Orders? _orders;
 

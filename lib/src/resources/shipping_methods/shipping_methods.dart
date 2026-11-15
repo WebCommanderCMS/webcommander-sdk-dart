@@ -21,12 +21,6 @@ class ShippingMethods {
           raiseOnError: raiseOnError,
           responseFormat: responseFormat);
 
-  /// Ask whether the collection is reachable — `HEAD /admin/shipping_methods`.
-  Future<ApiResponse> headShippingMethods(
-          {bool? raiseOnError, String? responseFormat}) =>
-      _headShippingMethods(_client,
-          raiseOnError: raiseOnError, responseFormat: responseFormat);
-
   /// How many methods the store holds — `GET /admin/shipping_methods/count`.
   Future<ApiResponse> countShippingMethods({
     Map<String, Object?>? queryParams,
@@ -55,13 +49,6 @@ class ShippingMethods {
           queryParams: queryParams,
           raiseOnError: raiseOnError,
           responseFormat: responseFormat);
-
-  /// Ask whether one method is there —
-  /// `HEAD /admin/shipping_methods/{shipping_method_id}`.
-  Future<ApiResponse> headShippingMethod(Object shippingMethodId,
-          {bool? raiseOnError, String? responseFormat}) =>
-      _headShippingMethod(_client, shippingMethodId,
-          raiseOnError: raiseOnError, responseFormat: responseFormat);
 
   /// Rename one method — `PUT /admin/shipping_methods/{shipping_method_id}`.
   Future<ApiResponse> updateShippingMethod(
@@ -96,12 +83,6 @@ Future<ApiResponse> listShippingMethods(
         raiseOnError: raiseOnError,
         responseFormat: responseFormat,
         dtoDecoder: ShippingMethodPage.fromMap);
-
-/// Ask whether the collection is reachable — `HEAD /admin/shipping_methods`.
-Future<ApiResponse> headShippingMethods(WebCommanderClient client,
-        {bool? raiseOnError, String? responseFormat}) =>
-    client.sendApiRequest('HEAD', ShippingMethodUrls.shippingMethods,
-        raiseOnError: raiseOnError, responseFormat: responseFormat);
 
 /// How many methods the store holds — `GET /admin/shipping_methods/count`.
 Future<ApiResponse> countShippingMethods(
@@ -141,16 +122,6 @@ Future<ApiResponse> getShippingMethod(
         responseFormat: responseFormat,
         dtoDecoder: ShippingMethod.fromMap);
 
-/// Ask whether one method is there —
-/// `HEAD /admin/shipping_methods/{shipping_method_id}`.
-Future<ApiResponse> headShippingMethod(
-        WebCommanderClient client, Object shippingMethodId,
-        {bool? raiseOnError, String? responseFormat}) =>
-    client.sendApiRequest('HEAD', ShippingMethodUrls.shippingMethod,
-        pathParams: {'shipping_method_id': shippingMethodId},
-        raiseOnError: raiseOnError,
-        responseFormat: responseFormat);
-
 /// Rename one method — `PUT /admin/shipping_methods/{shipping_method_id}`.
 Future<ApiResponse> updateShippingMethod(
         WebCommanderClient client, Object shippingMethodId, Object payload,
@@ -183,11 +154,9 @@ Future<ApiResponse> setShippingMethodDefault(
         dtoDecoder: ShippingMethod.fromMap);
 
 final _listShippingMethods = listShippingMethods;
-final _headShippingMethods = headShippingMethods;
 final _countShippingMethods = countShippingMethods;
 final _createShippingMethod = createShippingMethod;
 final _getShippingMethod = getShippingMethod;
-final _headShippingMethod = headShippingMethod;
 final _updateShippingMethod = updateShippingMethod;
 final _deleteShippingMethod = deleteShippingMethod;
 final _setShippingMethodDefault = setShippingMethodDefault;

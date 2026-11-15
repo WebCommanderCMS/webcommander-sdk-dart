@@ -21,12 +21,6 @@ class OrderFlags {
           raiseOnError: raiseOnError,
           responseFormat: responseFormat);
 
-  /// Ask whether the collection is reachable — `HEAD /admin/order_flags`.
-  Future<ApiResponse> headOrderFlags(
-          {bool? raiseOnError, String? responseFormat}) =>
-      _headOrderFlags(_client,
-          raiseOnError: raiseOnError, responseFormat: responseFormat);
-
   /// Create a flag — `POST /admin/order_flags`.
   Future<ApiResponse> createOrderFlag(Object payload,
           {bool? raiseOnError, String? responseFormat}) =>
@@ -37,12 +31,6 @@ class OrderFlags {
   Future<ApiResponse> getOrderFlag(Object orderFlagId,
           {bool? raiseOnError, String? responseFormat}) =>
       _getOrderFlag(_client, orderFlagId,
-          raiseOnError: raiseOnError, responseFormat: responseFormat);
-
-  /// Ask whether one flag is there — `HEAD /admin/order_flags/{order_flag_id}`.
-  Future<ApiResponse> headOrderFlag(Object orderFlagId,
-          {bool? raiseOnError, String? responseFormat}) =>
-      _headOrderFlag(_client, orderFlagId,
           raiseOnError: raiseOnError, responseFormat: responseFormat);
 
   /// Replace one flag — `PUT /admin/order_flags/{order_flag_id}`.
@@ -71,12 +59,6 @@ Future<ApiResponse> listOrderFlags(
         responseFormat: responseFormat,
         dtoDecoder: OrderFlagPage.fromMap);
 
-/// Ask whether the collection is reachable — `HEAD /admin/order_flags`.
-Future<ApiResponse> headOrderFlags(WebCommanderClient client,
-        {bool? raiseOnError, String? responseFormat}) =>
-    client.sendApiRequest('HEAD', OrderFlagUrls.orderFlags,
-        raiseOnError: raiseOnError, responseFormat: responseFormat);
-
 /// Create a flag — `POST /admin/order_flags`.
 Future<ApiResponse> createOrderFlag(WebCommanderClient client, Object payload,
         {bool? raiseOnError, String? responseFormat}) =>
@@ -94,14 +76,6 @@ Future<ApiResponse> getOrderFlag(WebCommanderClient client, Object orderFlagId,
         raiseOnError: raiseOnError,
         responseFormat: responseFormat,
         dtoDecoder: OrderFlagRecord.fromMap);
-
-/// Ask whether one flag is there — `HEAD /admin/order_flags/{order_flag_id}`.
-Future<ApiResponse> headOrderFlag(WebCommanderClient client, Object orderFlagId,
-        {bool? raiseOnError, String? responseFormat}) =>
-    client.sendApiRequest('HEAD', OrderFlagUrls.orderFlag,
-        pathParams: {'order_flag_id': orderFlagId},
-        raiseOnError: raiseOnError,
-        responseFormat: responseFormat);
 
 /// Replace one flag — `PUT /admin/order_flags/{order_flag_id}`.
 Future<ApiResponse> updateOrderFlag(
@@ -124,9 +98,7 @@ Future<ApiResponse> deleteOrderFlag(
         responseFormat: responseFormat);
 
 final _listOrderFlags = listOrderFlags;
-final _headOrderFlags = headOrderFlags;
 final _createOrderFlag = createOrderFlag;
 final _getOrderFlag = getOrderFlag;
-final _headOrderFlag = headOrderFlag;
 final _updateOrderFlag = updateOrderFlag;
 final _deleteOrderFlag = deleteOrderFlag;

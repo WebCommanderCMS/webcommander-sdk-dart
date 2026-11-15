@@ -127,10 +127,10 @@ class BlogAuthor extends Dto {
       };
 }
 
-/// One customer, by `internal_id`, or one customer group a restricted blog is
-/// shown to.
+/// One customer, by `customer_id`, or one customer group a restricted blog is
+/// shown to. A customer also carries its `internal_id`, for reference.
 class BlogAudienceMember extends Dto {
-  const BlogAudienceMember({this.id, this.name});
+  const BlogAudienceMember({this.id, this.internalId, this.name});
 
   /// Reads one entry of `customers` or `groups`.
   static BlogAudienceMember? fromMap(Object? body) {
@@ -138,17 +138,21 @@ class BlogAudienceMember extends Dto {
     if (source == null) return null;
     return BlogAudienceMember(
       id: readInteger(source['id']),
+      internalId: readInteger(source['internal_id']),
       name: readText(source['name']),
     );
   }
 
   final int? id;
 
+  final int? internalId;
+
   final String? name;
 
   @override
   Map<String, Object?> get fields => <String, Object?>{
         'id': id,
+        'internal_id': internalId,
         'name': name,
       };
 }
@@ -181,8 +185,8 @@ class BlogAudience extends Dto {
       };
 }
 
-/// The audience a write names: customer `internal_id` values and customer group
-/// ids. A `customer_id` is dropped without a refusal.
+/// The audience a write names: customer `customer_id` values and customer group
+/// ids.
 class BlogAudienceInput extends Dto {
   const BlogAudienceInput({this.customers, this.groups});
 

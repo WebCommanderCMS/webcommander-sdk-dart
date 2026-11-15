@@ -3,10 +3,10 @@ library;
 
 import '../../client/dto.dart';
 
-/// One gift card. `code` is what an order preview's `gift-card` call takes; a
-/// card can be applied only while `is_active` and `is_paid`, with a `balance`
-/// above zero, before its `available_to` date and with `email` equal to the
-/// previewed customer's email.
+/// One gift card. `code` is what a checkout's `gift_card` call takes; a card
+/// can be applied only while `is_active` and `is_paid`, with a `balance` above
+/// zero, before its `available_to` date and with `email` equal to the cart
+/// customer's email.
 class GiftCard extends Dto {
   const GiftCard({
     this.id,

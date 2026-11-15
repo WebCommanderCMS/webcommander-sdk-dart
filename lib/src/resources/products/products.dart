@@ -419,8 +419,8 @@ Future<ApiResponse> checkProductSku(WebCommanderClient client, String sku,
 /// List a special selection of products — `GET /admin/products/special`.
 /// `type` is required: `onSale`, `featured`, `new`, `topSelling`, `lastBought`
 /// or `lastViewed`. `max` (1 to 100, default 10) and `offset` page it. The last
-/// two are per customer and need `customerId` (the `customer_id` or
-/// `internal_id` of a customer) or `customer_email`; `customer_id` is not read,
+/// two are per customer and need `customerId` (a customer's
+/// `customer_id`) or `customer_email`; `customer_id` is not read,
 /// and an unknown customer is `400 unknown_reference`. A name it does not know
 /// is ignored.
 Future<ApiResponse> listSpecialProducts(

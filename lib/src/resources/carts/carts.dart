@@ -63,7 +63,7 @@ class Carts {
 
 /// Add a product to the cart `session_id` names, creating it — `POST /carts`,
 /// `201`; re-adding raises the line's quantity. `customer_id` is the customer's
-/// `internal_id`.
+/// `customer_id`.
 Future<ApiResponse> addCartItem(WebCommanderClient client, Object payload,
         {bool? raiseOnError, String? responseFormat}) =>
     client.sendPostRequest(CartUrls.carts,
@@ -129,9 +129,9 @@ Future<ApiResponse> deleteCartItem(
         responseFormat: responseFormat);
 
 /// Turn the cart into an order — `POST /admin/orders/carts/{session_id}`,
-/// `201`, and the cart is gone. `customer_id` is the customer's `customer_id`,
-/// not its `internal_id`. [transactionNo] is sent as `X-Transaction-No` and
-/// files the order under that number.
+/// `201`, and the cart is gone. `customer_id` is the customer's `customer_id`.
+/// [transactionNo] is sent as `X-Transaction-No` and files the order under that
+/// number.
 Future<ApiResponse> createOrderFromCart(
         WebCommanderClient client, String sessionId, Object payload,
         {String? transactionNo, bool? raiseOnError, String? responseFormat}) =>

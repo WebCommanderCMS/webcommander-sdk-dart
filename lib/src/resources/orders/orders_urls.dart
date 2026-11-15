@@ -51,15 +51,11 @@ class OrderUrls {
   static const String orderUpdateStatus =
       '/api/{api_version}/admin/orders/{order_id}/update-status';
 
-  /// Resolves the slot against the order's `internal_id`: an `order_id` there
-  /// names another order, or none.
   static const String orderCustomFields =
-      '/api/{api_version}/admin/orders/{order_internal_id}/custom_fields';
+      '/api/{api_version}/admin/orders/{order_id}/custom_fields';
 
-  /// Resolves the slot against the order's `internal_id`, as
-  /// [orderCustomFields] does.
   static const String orderSendInvoice =
-      '/api/{api_version}/admin/orders/{order_internal_id}/send-invoice';
+      '/api/{api_version}/admin/orders/{order_id}/send-invoice';
 
   /// A payment's refunds, by the payment receipt's `id`.
   static const String paymentRefunds =

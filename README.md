@@ -22,7 +22,7 @@ or add it to `pubspec.yaml` and run `dart pub get`:
 
 ```yaml
 dependencies:
-  webcommander: ^4.0.2
+  webcommander: ^4.0.3
 ```
 
 Everything is exported from one library:
@@ -218,11 +218,12 @@ A `200` whose body carries `{"isSuccess": false}` counts as a failure. Configura
 
 ## Resources
 
-The client exposes 56 resources with 422 operations. The method, path and behaviour of each one
+The client exposes 56 resources with 435 operations. The method, path and behaviour of each one
 are in the API reference at <https://newlify.mintlify.app>.
 
 | Resource | Client accessor | Operations |
 |---|---|---:|
+| Admin carts | `client.adminCarts` | 19 |
 | Customers | `client.adminCustomers` | 15 |
 | Aliases | `client.aliases` | 4 |
 | Animation effects settings | `client.animationEffects` | 7 |
@@ -247,10 +248,9 @@ are in the API reference at <https://newlify.mintlify.app>.
 | Ecommerce settings | `client.ecommerceSettings` | 5 |
 | Email | `client.email` | 1 |
 | Gift cards | `client.giftCards` | 1 |
-| Inventory locations | `client.inventoryLocations` | 11 |
+| Inventory locations | `client.inventoryLocations` | 9 |
 | Order custom fields | `client.orderCustomFields` | 4 |
-| Order flags | `client.orderFlags` | 7 |
-| Order previews | `client.orderPreviews` | 7 |
+| Order flags | `client.orderFlags` | 5 |
 | Orders | `client.orders` | 25 |
 | Pages | `client.pages` | 15 |
 | Payment gateways | `client.paymentGateways` | 8 |
@@ -261,21 +261,21 @@ are in the API reference at <https://newlify.mintlify.app>.
 | Search result page settings | `client.searchResultPage` | 14 |
 | Search settings | `client.searchSettings` | 9 |
 | SEO configuration | `client.seoConfiguration` | 18 |
-| Shipping classes | `client.shippingClasses` | 9 |
-| Shipping methods | `client.shippingMethods` | 9 |
+| Shipping classes | `client.shippingClasses` | 7 |
+| Shipping methods | `client.shippingMethods` | 7 |
 | Shipping profiles | `client.shippingProfiles` | 11 |
 | Shipping rates | `client.shippingRates` | 10 |
 | Shipping rules | `client.shippingRules` | 10 |
 | Shipping settings | `client.shippingSettings` | 3 |
 | Shopping cart settings | `client.shoppingCart` | 5 |
 | Site settings | `client.siteSettings` | 5 |
-| Tax codes | `client.taxCodes` | 7 |
+| Tax codes | `client.taxCodes` | 5 |
 | Tax country taxes | `client.taxCountryTaxes` | 5 |
 | Tax custom profiles | `client.taxCustomProfiles` | 5 |
-| Tax profiles | `client.taxProfiles` | 7 |
-| Tax rules | `client.taxRules` | 7 |
+| Tax profiles | `client.taxProfiles` | 5 |
+| Tax rules | `client.taxRules` | 5 |
 | Tax settings | `client.taxSettings` | 4 |
-| Tax zones | `client.taxZones` | 7 |
+| Tax zones | `client.taxZones` | 5 |
 | Transactions | `client.transactions` | 6 |
 | Trash | `client.trash` | 9 |
 | Variations | `client.variations` | 16 |

@@ -316,7 +316,7 @@ class CustomerGroupMember extends Dto {
     );
   }
 
-  /// `id` — the customer's `customer_id`, never its `internal_id`.
+  /// `id` — the customer's `customer_id`.
   final int? id;
 
   final String? firstName;

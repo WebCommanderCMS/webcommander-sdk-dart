@@ -128,6 +128,54 @@ export 'src/resources/blogs/blogs_dto.dart'
         BlogResourceMeta,
         BlogSeoConfigs;
 export 'src/resources/blogs/blogs_urls.dart' show BlogUrls;
+export 'src/resources/carts/admin_carts.dart'
+    show
+        AdminCarts,
+        addAdminCartItems,
+        applyCheckoutCoupon,
+        applyCheckoutGiftCard,
+        clearAdminCartItems,
+        clearCheckoutDeliverySchedule,
+        confirmCheckout,
+        createAdminCart,
+        deleteAdminCart,
+        deleteAdminCartItem,
+        getAdminCart,
+        getCheckout,
+        getCheckoutDeliverySchedules,
+        removeCheckoutCoupon,
+        removeCheckoutGiftCard,
+        replaceAdminCart,
+        setCheckoutDeliverySchedule,
+        updateAdminCart,
+        updateAdminCartItem,
+        updateCheckout;
+export 'src/resources/carts/admin_carts_dto.dart'
+    show
+        AdminCart,
+        AdminCartCustomer,
+        AdminCartCustomerInput,
+        AdminCartInput,
+        AdminCartItem,
+        AdminCartItemUpdateInput,
+        AdminCartItemsInput,
+        AdminCartProductInput,
+        AdminCartSession,
+        AdminCartTotals,
+        AdminCheckout,
+        AdminCheckoutCodeInput,
+        AdminCheckoutConfirmInput,
+        AdminCheckoutDeliveryScheduleInput,
+        AdminCheckoutInput,
+        AdminCheckoutPaymentInput,
+        CheckoutAddress,
+        CheckoutCoupon,
+        CheckoutDiscounts,
+        CheckoutGiftCard,
+        CheckoutIssue,
+        CheckoutShipping,
+        CheckoutTotals;
+export 'src/resources/carts/admin_carts_urls.dart' show AdminCartUrls;
 export 'src/resources/carts/carts.dart'
     show
         Carts,
@@ -481,8 +529,6 @@ export 'src/resources/inventory_locations/inventory_locations.dart'
         deleteInventoryLocation,
         getInventoryLocation,
         getInventoryLocationStock,
-        headInventoryLocation,
-        headInventoryLocations,
         listInventoryLocations,
         patchInventoryLocation,
         setInventoryLocationDefault,
@@ -523,40 +569,11 @@ export 'src/resources/order_flags/order_flags.dart'
         createOrderFlag,
         deleteOrderFlag,
         getOrderFlag,
-        headOrderFlag,
-        headOrderFlags,
         listOrderFlags,
         updateOrderFlag;
 export 'src/resources/order_flags/order_flags_dto.dart'
     show OrderFlagInput, OrderFlagPage, OrderFlagPagination, OrderFlagRecord;
 export 'src/resources/order_flags/order_flags_urls.dart' show OrderFlagUrls;
-export 'src/resources/order_previews/order_previews.dart'
-    show
-        OrderPreviews,
-        applyOrderPreviewCoupon,
-        applyOrderPreviewGiftCard,
-        confirmOrderPreview,
-        createOrderPreview,
-        getOrderPreview,
-        removeOrderPreviewCoupon,
-        removeOrderPreviewGiftCard;
-export 'src/resources/order_previews/order_previews_dto.dart'
-    show
-        OrderPreview,
-        OrderPreviewCodeInput,
-        OrderPreviewConfirmInput,
-        OrderPreviewInput,
-        OrderPreviewPaymentInput,
-        PreviewCoupon,
-        PreviewCustomer,
-        PreviewDiscounts,
-        PreviewGiftCard,
-        PreviewItem,
-        PreviewSession,
-        PreviewShipping,
-        PreviewTotals;
-export 'src/resources/order_previews/order_previews_urls.dart'
-    show OrderPreviewUrls;
 export 'src/resources/orders/orders.dart'
     show
         Orders,
@@ -1274,8 +1291,6 @@ export 'src/resources/shipping_classes/shipping_classes.dart'
         createShippingClass,
         deleteShippingClass,
         getShippingClass,
-        headShippingClass,
-        headShippingClasses,
         listShippingClasses,
         setShippingClassDefault,
         updateShippingClass;
@@ -1295,8 +1310,6 @@ export 'src/resources/shipping_methods/shipping_methods.dart'
         createShippingMethod,
         deleteShippingMethod,
         getShippingMethod,
-        headShippingMethod,
-        headShippingMethods,
         listShippingMethods,
         setShippingMethodDefault,
         updateShippingMethod;
@@ -1391,8 +1404,6 @@ export 'src/resources/tax_codes/tax_codes.dart'
         createTaxCode,
         deleteTaxCode,
         getTaxCode,
-        headTaxCode,
-        headTaxCodes,
         listTaxCodes,
         updateTaxCode;
 export 'src/resources/tax_codes/tax_codes_dto.dart'
@@ -1445,8 +1456,6 @@ export 'src/resources/tax_profiles/tax_profiles.dart'
         createTaxProfile,
         deleteTaxProfile,
         getTaxProfile,
-        headTaxProfile,
-        headTaxProfiles,
         listTaxProfiles,
         updateTaxProfile;
 export 'src/resources/tax_profiles/tax_profiles_dto.dart'
@@ -1465,8 +1474,6 @@ export 'src/resources/tax_rules/tax_rules.dart'
         createTaxRule,
         deleteTaxRule,
         getTaxRule,
-        headTaxRule,
-        headTaxRules,
         listTaxRules,
         updateTaxRule;
 export 'src/resources/tax_rules/tax_rules_dto.dart'
@@ -1501,8 +1508,6 @@ export 'src/resources/tax_zones/tax_zones.dart'
         createTaxZone,
         deleteTaxZone,
         getTaxZone,
-        headTaxZone,
-        headTaxZones,
         listTaxZones,
         updateTaxZone;
 export 'src/resources/tax_zones/tax_zones_dto.dart'

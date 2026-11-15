@@ -1,5 +1,5 @@
 /// Admin customer path templates; the client fills `{api_version}`.
-/// `{customer_id}` takes `customer_id`, not the overlapping `internal_id`.
+/// `{customer_id}` takes `customer_id`.
 class CustomerUrls {
   CustomerUrls._();
 

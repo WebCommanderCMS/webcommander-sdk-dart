@@ -5,6 +5,7 @@ import 'web_commander_client.dart';
 typedef ResourceFactory = Object Function(WebCommanderClient client);
 
 final Map<String, ResourceFactory> _resourceModules = <String, ResourceFactory>{
+  'adminCarts': (WebCommanderClient client) => client.adminCarts,
   'adminCustomers': (WebCommanderClient client) => client.adminCustomers,
   'seoConfiguration': (WebCommanderClient client) => client.seoConfiguration,
   'searchResultPage': (WebCommanderClient client) => client.searchResultPage,
@@ -31,7 +32,6 @@ final Map<String, ResourceFactory> _resourceModules = <String, ResourceFactory>{
   'shippingRules': (WebCommanderClient client) => client.shippingRules,
   'aliases': (WebCommanderClient client) => client.aliases,
   'countries': (WebCommanderClient client) => client.countries,
-  'orderPreviews': (WebCommanderClient client) => client.orderPreviews,
   'orders': (WebCommanderClient client) => client.orders,
   'carts': (WebCommanderClient client) => client.carts,
   'dashboardBanners': (WebCommanderClient client) => client.dashboardBanners,

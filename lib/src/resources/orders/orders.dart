@@ -107,10 +107,10 @@ class Orders {
           raiseOnError: raiseOnError, responseFormat: responseFormat);
 
   /// An order's custom field values —
-  /// `GET /admin/orders/{order_internal_id}/custom_fields`.
-  Future<ApiResponse> getOrderCustomFields(Object orderInternalId,
+  /// `GET /admin/orders/{order_id}/custom_fields`.
+  Future<ApiResponse> getOrderCustomFields(Object orderId,
           {bool? raiseOnError, String? responseFormat}) =>
-      _getOrderCustomFields(_client, orderInternalId,
+      _getOrderCustomFields(_client, orderId,
           raiseOnError: raiseOnError, responseFormat: responseFormat);
 
   /// Record a payment — `POST /admin/orders/{order_id}/payments`.
@@ -145,10 +145,10 @@ class Orders {
           raiseOnError: raiseOnError, responseFormat: responseFormat);
 
   /// Email the invoice —
-  /// `POST /admin/orders/{order_internal_id}/send-invoice`.
-  Future<ApiResponse> sendOrderInvoice(Object orderInternalId,
+  /// `POST /admin/orders/{order_id}/send-invoice`.
+  Future<ApiResponse> sendOrderInvoice(Object orderId,
           {bool? raiseOnError, String? responseFormat}) =>
-      _sendOrderInvoice(_client, orderInternalId,
+      _sendOrderInvoice(_client, orderId,
           raiseOnError: raiseOnError, responseFormat: responseFormat);
 
   /// How far an order has shipped —
@@ -199,7 +199,7 @@ class Orders {
 }
 
 /// List orders — `GET /admin/orders`, newest first; cancelled only under
-/// `order_status`. `limit` caps at 20 and `customerId` takes an `internal_id`.
+/// `order_status`. `limit` caps at 20 and `customerId` takes a `customer_id`.
 Future<ApiResponse> listOrders(
   WebCommanderClient client, {
   Map<String, Object?>? queryParams,
@@ -348,12 +348,12 @@ Future<ApiResponse> createOrderComment(
         dtoDecoder: OrderCommentRecord.fromMap);
 
 /// An order's custom field values —
-/// `GET /admin/orders/{order_internal_id}/custom_fields`, by `internal_id`.
+/// `GET /admin/orders/{order_id}/custom_fields`.
 Future<ApiResponse> getOrderCustomFields(
-        WebCommanderClient client, Object orderInternalId,
+        WebCommanderClient client, Object orderId,
         {bool? raiseOnError, String? responseFormat}) =>
     client.sendGetRequest(OrderUrls.orderCustomFields,
-        pathParams: {'order_internal_id': orderInternalId},
+        pathParams: {'order_id': orderId},
         raiseOnError: raiseOnError,
         responseFormat: responseFormat,
         dtoDecoder: OrderCustomFieldValues.fromMap);
@@ -413,13 +413,11 @@ Future<ApiResponse> createPaymentRefund(WebCommanderClient client,
         responseFormat: responseFormat,
         dtoDecoder: PaymentRefund.fromMap);
 
-/// Email the invoice — `POST /admin/orders/{order_internal_id}/send-invoice`,
-/// by `internal_id`; no body.
-Future<ApiResponse> sendOrderInvoice(
-        WebCommanderClient client, Object orderInternalId,
+/// Email the invoice — `POST /admin/orders/{order_id}/send-invoice`; no body.
+Future<ApiResponse> sendOrderInvoice(WebCommanderClient client, Object orderId,
         {bool? raiseOnError, String? responseFormat}) =>
     client.sendPostRequest(OrderUrls.orderSendInvoice,
-        pathParams: {'order_internal_id': orderInternalId},
+        pathParams: {'order_id': orderId},
         raiseOnError: raiseOnError,
         responseFormat: responseFormat,
         dtoDecoder: InvoiceDispatch.fromMap);
