@@ -37,7 +37,7 @@ class AdminCartUrls {
   static const String adminCheckoutDeliverySchedules =
       '/api/{api_version}/admin/orders/checkout/{session_id}/delivery_schedules';
 
-  /// Files the order a checkout places under this transaction number; it beats
-  /// `transaction_no`.
+  /// Files the order a checkout places under this transaction number;
+  /// a differing top-level `transaction_no` is `400 header_body_mismatch`.
   static const String transactionNoHeader = 'X-Transaction-No';
 }

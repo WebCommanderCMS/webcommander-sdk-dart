@@ -26,7 +26,7 @@ class VariationUrls {
   static const String productVariationsBulk =
       '/api/{api_version}/admin/products/{product_id}/variations/bulk';
 
-  /// The header that tags an import with a transaction number; it wins over a
-  /// body `transaction_no` it disagrees with.
+  /// The header that tags an import with a transaction number; a
+  /// differing top-level `transaction_no` is `400 header_body_mismatch`.
   static const String transactionNoHeader = 'X-Transaction-No';
 }

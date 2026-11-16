@@ -16,7 +16,6 @@ class CartUrls {
   static const String cartOrder =
       '/api/{api_version}/admin/orders/carts/{session_id}';
 
-  /// Files the order a cart becomes under this transaction number; it beats
-  /// `transaction_no`.
+  /// Files the order a cart becomes under this transaction number.
   static const String transactionNoHeader = 'X-Transaction-No';
 }

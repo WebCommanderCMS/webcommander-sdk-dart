@@ -18,7 +18,8 @@ class ShippingProfileUrls {
   static const String shippingProfile =
       '/api/{api_version}/admin/shipping_profiles/{shipping_profile_id}';
 
-  /// Files a new record under this transaction number; it wins over a
-  /// `transaction_no` in the body.
+  /// Files a new record under this transaction number; a
+  /// differing `transaction_no` beside the wrapper is `400 header_body_mismatch`;
+  /// one inside is not compared.
   static const String transactionNoHeader = 'X-Transaction-No';
 }

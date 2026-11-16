@@ -13,7 +13,8 @@ class ShippingRuleUrls {
   static const String shippingRule =
       '/api/{api_version}/admin/shipping_rules/{shipping_rule_id}';
 
-  /// Files a new record under this transaction number; it wins over a
-  /// `transaction_no` in the body.
+  /// Files a new record under this transaction number; a
+  /// differing `transaction_no` beside the wrapper is `400 header_body_mismatch`;
+  /// one inside is not compared.
   static const String transactionNoHeader = 'X-Transaction-No';
 }

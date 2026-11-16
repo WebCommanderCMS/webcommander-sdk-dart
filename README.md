@@ -22,7 +22,7 @@ or add it to `pubspec.yaml` and run `dart pub get`:
 
 ```yaml
 dependencies:
-  webcommander: ^4.0.3
+  webcommander: ^4.0.4
 ```
 
 Everything is exported from one library:

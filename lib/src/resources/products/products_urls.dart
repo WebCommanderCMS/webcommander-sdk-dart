@@ -68,7 +68,8 @@ class ProductUrls {
   static const String productMediaOrder =
       '/api/{api_version}/admin/products/{product_id}/media/order';
 
-  /// The header that tags a create with a transaction number; it wins over a
-  /// body `transaction_no` it disagrees with.
+  /// The header that tags a create with a transaction number; a
+  /// differing top-level `transaction_no` is `400 header_body_mismatch`; reviews
+  /// and inventory check beside `product`.
   static const String transactionNoHeader = 'X-Transaction-No';
 }

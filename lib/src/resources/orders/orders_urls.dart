@@ -73,7 +73,7 @@ class OrderUrls {
   /// replays the first refund.
   static const String idempotencyKeyHeader = 'Idempotency-Key';
 
-  /// Files a created order under this transaction number; it beats a
-  /// `transaction_no` body field.
+  /// Files a created order under this transaction number; a
+  /// differing top-level `transaction_no` is `400 header_body_mismatch`.
   static const String transactionNoHeader = 'X-Transaction-No';
 }
